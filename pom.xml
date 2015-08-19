@@ -27,7 +27,7 @@
 	<artifactId>jackson-core</artifactId>
 	<version>2.6.1</version>
 </dependency>
-	<dependency>
+	<!-- <dependency>
                         <groupId>com.comcast.csv.grocery</groupId>
                         <artifactId>results-spice</artifactId>
                         <version>2.0.8</version>
@@ -36,7 +36,7 @@
                         <groupId>com.comcast.csv.grocery</groupId>
                         <artifactId>utils-spice</artifactId>
                         <version>2.0.8</version>
-                </dependency>
+                </dependency> -->
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
