@@ -11,7 +11,7 @@
 
 	<properties>
 		<java.compile.version>1.7</java.compile.version>
-		<!-- <zukes.version>[1.0.0,)</zukes.version> -->
+		<!-- <<zukes.version>[1.0.0,)</zukes.version>  -->
 		<grocery.version>[1.0.21,)</grocery.version>
 		<spice.version>[1.0.178,)</spice.version>
 		<xapi.version>[1.2.23,)</xapi.version>
@@ -53,11 +53,11 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.comcast.csv.zucchini</groupId>
 			<artifactId>zucchini</artifactId>
 			<version>${zukes.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>com.comcast.csv.grocery</groupId>
 			<artifactId>grocery-store</artifactId>
