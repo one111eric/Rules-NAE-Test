@@ -1,0 +1,17 @@
+{ "code" :
+  {
+      "location": "209052550323032015Comcast.cust",
+      "app": "myapp",
+      "type": "ALARM_IN_PROGRESS",
+      "transport": [
+          "emo"
+      ],
+      "params": {
+          "topic": ""
+      },
+      "data": {
+          "timestamp": 1428686740841,
+          "zone": "front door"
+      }
+  }
+}

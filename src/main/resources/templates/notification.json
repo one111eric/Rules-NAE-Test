@@ -1,0 +1,20 @@
+{
+  "apns": {
+      "alert": "Alarm at Fri, 10 Apr 2015 17:25:40 UTC triggered by front door.",
+      "badge": 1,
+      "content-available": 1,
+      "expires": 0,
+      "loc-key": "KEY",
+      "otherdata": "ALARM_IN_PROGRESS",
+      "sound": "alarm.was"
+  },
+  "gcm": {
+      "collapse_key": "CollapseAlertsWith",
+      "delay_while_idle": false,
+      "otherdata": {
+          "message": "Alarm at Fri, 10 Apr 2015 17:25:40 UTC triggered by front door.",
+          "title": "Alarm In Progress"
+      },
+      "time_to_live": "3600"
+  }
+}
