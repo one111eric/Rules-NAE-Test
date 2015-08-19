@@ -1,5 +1,7 @@
 package glue;
 
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
 import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
@@ -70,7 +72,7 @@ public class NAEMockTest {
 				.asString());
 		String message = path.get("message").toString();
 		System.out.println("message: " + message);
-		Assert.assertTrue(message.equals("Alarm triggered by back door"));
+		AssertJUnit.assertTrue(message.equals("Alarm triggered by back door"));
 	}
 	
 }
