@@ -3,11 +3,11 @@
   <groupId>com.comcast.csvte</groupId>
   <artifactId>rules-NAE-test</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-<parent>
+	<!-- <parent>
 		<groupId>com.comcast.tvx</groupId>
 		<artifactId>tvx-pom</artifactId>
 		<version>1.0.58</version>
-	</parent>
+	</parent> -->
 
 	<properties>
 		<java.compile.version>1.7</java.compile.version>
