@@ -10,7 +10,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.jayway.restassured.response.Response;
 
+import java.util.Date;
 public class NAE_Mock_Util {
+	
+	private Long unixTimeStamp;
 	// default constructor
 	public NAE_Mock_Util() {
 	}
@@ -20,7 +23,7 @@ public class NAE_Mock_Util {
 		String requestbody = "";
 		// create a simple request body
 		NAE_Request_Body body = new NAE_Request_Body();
-		
+		this.unixTimeStamp=body.getCode().getData().getTimestamp();
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
@@ -43,7 +46,8 @@ public class NAE_Mock_Util {
 	public String ResponseBodyString() {
 		String responsebody = "";
 		NAE_Response_Body body = new NAE_Response_Body();
-		body.setMessage("Alarm triggered by back door");
+		Date time=new Date((long)unixTimeStamp*1000);
+		body.setMessage("Alarm triggered at "+time.toString());
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			responsebody = mapper.writeValueAsString(body);

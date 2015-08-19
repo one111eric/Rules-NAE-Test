@@ -16,7 +16,7 @@ import org.mockserver.model.Header;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+
 
 import com.jayway.restassured.path.json.JsonPath;
 
@@ -42,7 +42,7 @@ public class NAEMockTest {
 		mockServer.stop();
 	}
     
-	//Inject a Stub to mock server and then verify the result
+	//Inject a Stub to mock server 
 	public void InjectStub() 
 	{
 		String requestbody=newUtil.RequestBodyString();
@@ -72,7 +72,7 @@ public class NAEMockTest {
 				.asString());
 		String message = path.get("message").toString();
 		System.out.println("message: " + message);
-		Assert.assertTrue(message.equals("Alarm triggered by back door"));
+		Assert.assertTrue(message.equals("Alarm triggered at Wed Aug 19 13:27:11 PDT 2015"));
 	}
 	
 }
