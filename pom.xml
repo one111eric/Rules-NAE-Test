@@ -115,11 +115,11 @@
 				<artifactId>gson</artifactId>
 				<version>2.2.4</version>
 			</dependency>
-			<dependency>
+			<!-- <dependency>
 				<groupId>com.comcast.csv.grocery</groupId>
 				<artifactId>spice-rack</artifactId>
 				<version>${spice.version}</version>
-			</dependency>
+			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 
