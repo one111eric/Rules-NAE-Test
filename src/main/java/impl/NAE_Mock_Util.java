@@ -89,7 +89,7 @@ public class NAE_Mock_Util {
 		Response response = given()
 				.log().all()
 				.contentType(ContentType.JSON)
-				.body(RequestBodyString().replace("1440016031", "1440016090"))
+				.body(RequestBodyString())
 				.expect().statusCode(200)
 				.post(url);
 

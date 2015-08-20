@@ -43,7 +43,7 @@ public class NAEMockTest {
 
 	// Inject a Stub to mock server
 	public void InjectStub() {
-		//String requestbody = newUtil.RequestBodyString();
+		String requestbody = newUtil.RequestBodyString();
 		String responsebody = newUtil.ResponseBodyString();
 
 		mockServer
@@ -51,14 +51,14 @@ public class NAEMockTest {
 						.withMethod("POST")
 						.withPath("/nae")
 
-						.withBody(
-								JsonSchemaBody
-										.jsonSchemaFromResource("src/main/resources/templates/RequestBodySchema.json"))
+						//.withBody(
+								//JsonSchemaBody
+									//	.jsonSchemaFromResource("src/main/resources/templates/RequestBodySchema.json"))
 				// .withBody(JsonBody.json(requestbody,MatchType.ONLY_MATCHING_FIELDS))
 
 				// .withBody(new JsonBody(requestbody))
 
-				// .withBody(requestbody)
+				 .withBody(requestbody)
 				)
 				.respond(
 						response()
