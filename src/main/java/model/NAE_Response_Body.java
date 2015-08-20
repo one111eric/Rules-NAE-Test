@@ -1,4 +1,4 @@
-package impl;
+package model;
 
 public class NAE_Response_Body {
 private String message;

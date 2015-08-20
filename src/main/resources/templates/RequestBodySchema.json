@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "code": {
+      "id": "http://jsonschema.net/code",
+      "type": "object",
+      "properties": {
+        "location": {
+          "id": "http://jsonschema.net/code/location",
+          "type": "string"
+        },
+        "app": {
+          "id": "http://jsonschema.net/code/app",
+          "type": "string"
+        },
+        "type": {
+          "id": "http://jsonschema.net/code/type",
+          "type": "string"
+        },
+        "transport": {
+          "id": "http://jsonschema.net/code/transport",
+          "type": "array",
+          "items": {
+            "id": "http://jsonschema.net/code/transport/0",
+            "type": "string"
+          }
+        },
+        "params": {
+          "id": "http://jsonschema.net/code/params",
+          "type": "object",
+          "properties": {
+            "topic": {
+              "id": "http://jsonschema.net/code/params/topic",
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "id": "http://jsonschema.net/code/data",
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "id": "http://jsonschema.net/code/data/timestamp",
+              "type": "integer"
+            },
+            "zone": {
+              "id": "http://jsonschema.net/code/data/zone",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "location",
+        "app",
+        "type",
+        "transport",
+        "params",
+        "data"
+      ]
+    }
+  },
+  "required": [
+    "code"
+  ]
+}

@@ -1,4 +1,4 @@
-package impl;
+package model;
 
 public class Data {
 	private long timestamp;

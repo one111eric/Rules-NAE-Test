@@ -1,4 +1,4 @@
-package impl;
+package model;
 
 public class NAE_Request_Body {
 	private Code code;

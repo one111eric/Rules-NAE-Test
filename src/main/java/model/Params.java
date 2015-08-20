@@ -1,4 +1,4 @@
-package impl;
+package model;
 
 public class Params {
 private String topic;
