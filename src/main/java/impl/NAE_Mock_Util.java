@@ -51,7 +51,7 @@ public class NAE_Mock_Util {
 		String responsebody = "";
 		NAE_Response_Body body = new NAE_Response_Body();
 		Date time=new Date((long)this.unixTimeStamp*1000);
-		body.setMessage("Alarm triggered at "+time.toString());
+		//body.setMessage("Alarm triggered at "+time.toString());
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			responsebody = mapper.writeValueAsString(body);
@@ -96,4 +96,5 @@ public class NAE_Mock_Util {
 		response.prettyPrint();
 		return response;
 	}
+    
 }

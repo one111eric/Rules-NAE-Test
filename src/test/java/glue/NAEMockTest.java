@@ -2,13 +2,14 @@ package glue;
 
 import org.testng.annotations.Test;
 
+
 //import org.testng.AssertJUnit;
 import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
-
 import impl.NAE_Mock_Util;
+import impl.NAE_Real_Util;
 
 import org.mockserver.integration.ClientAndProxy;
 import org.mockserver.integration.ClientAndServer;
@@ -25,7 +26,7 @@ public class NAEMockTest {
 	private ClientAndServer mockServer;
 
 	NAE_Mock_Util newUtil = new NAE_Mock_Util();
-
+    NAE_Real_Util realutil=new NAE_Real_Util();
 	// Start Mock Server before test
 	@BeforeTest
 	public void startProxy() {
@@ -76,7 +77,7 @@ public class NAEMockTest {
 	}
 
 	// Test
-	@Test
+	//@Test
 	public void MockTest() {
 		InjectStub();
 		JsonPath path = new JsonPath(newUtil.getNAEMockResponse().asString());
@@ -84,6 +85,11 @@ public class NAEMockTest {
 		System.out.println("message: " + message);
 		Assert.assertTrue(message
 				.equals("Alarm triggered at Wed Aug 19 13:27:11 PDT 2015"));
+	}
+	@Test
+	public void realtest(){
+		String responsebody=realutil.getNAERealResponse("src/test/resources/test_data/Valid_JSON.json").body().asString();
+		System.out.print(responsebody);
 	}
 
 }
