@@ -50,12 +50,7 @@
 			<artifactId>json</artifactId>
 			<version>20140107</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
+		
 		<dependency>
 	<groupId>info.cukes</groupId>
 	<artifactId>cucumber-java</artifactId>
@@ -112,7 +107,7 @@
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>6.8.8</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
      <groupId>org.mock-server</groupId>
@@ -121,7 +116,7 @@
 </dependency>
 <dependency>
 	<groupId>info.cukes</groupId>
-	<artifactId>cucumber-junit</artifactId>
+	<artifactId>cucumber-testng</artifactId>
 	<version>1.2.4</version>
 </dependency>
 	</dependencies>

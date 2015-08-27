@@ -1,16 +1,15 @@
 package glue;
 
-import org.junit.runner.RunWith;
 import org.testng.annotations.Test;
 
-import cucumber.api.junit.Cucumber;
+
 import cucumber.api.CucumberOptions;
+import cucumber.api.testng.AbstractTestNGCucumberTests;
 
 @CucumberOptions(glue={"glue"},features={"src/test/resources/test_features/"})
 
-@RunWith(Cucumber.class)
 
-public class NAECucumberTest {
+public class NAECucumberTest extends AbstractTestNGCucumberTests{
 
 	
 }
