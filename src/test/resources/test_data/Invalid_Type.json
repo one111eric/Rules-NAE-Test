@@ -1,0 +1,22 @@
+{ "code" :
+  {
+      "location": "209052550323032015Comcast.cust",
+      "app": "myapp",
+      "type": "light",
+      "transport": [
+          "emo"
+      ],
+      "params": {
+          "topic": "/xhs/tps/209052550323032015Comcast.cust/notifications/alarm",
+          "phone": "15109313328",
+          "email": "boris_wolf@cable.comcast.com",
+          "deviceid": "8987917728960591079",
+          "duration": "10000",
+          "timezone": "EST"
+      },
+      "data": {
+          "timestamp": 1428686740841,
+          "zone": "front door"
+      }
+  }
+}

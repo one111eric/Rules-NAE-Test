@@ -18,6 +18,9 @@
 		<supermarketsweep.version>[1.0.72,)</supermarketsweep.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<jsonsmart.version>1.2</jsonsmart.version>
+		
+		<zukes.version>[1.0.85,)</zukes.version>
+	
 	</properties>
 
 	
@@ -110,6 +113,11 @@
      <groupId>org.mock-server</groupId>
      <artifactId>mockserver-netty</artifactId>
      <version>3.9.17</version>
+</dependency>
+<dependency>
+  <groupId>com.comcast.csv.zucchini</groupId>
+  <artifactId>zucchini</artifactId>
+  <version>${zukes.version}</version>
 </dependency>
 	</dependencies>
 

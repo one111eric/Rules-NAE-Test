@@ -28,7 +28,7 @@ public class NAEMockTest {
 	NAE_Mock_Util newUtil = new NAE_Mock_Util();
     NAE_Real_Util realutil=new NAE_Real_Util();
 	// Start Mock Server before test
-	@BeforeTest
+	//@BeforeTest
 	public void startProxy() {
 		mockServer = startClientAndServer(1080);
 		proxy = startClientAndProxy(1090);
@@ -36,7 +36,7 @@ public class NAEMockTest {
 	}
 
 	// Shut Down Mock Server after test
-	@AfterTest
+	//@AfterTest
 	public void stopProxy() {
 		proxy.stop();
 		mockServer.stop();
@@ -88,8 +88,10 @@ public class NAEMockTest {
 	}
 	@Test
 	public void realtest(){
-		String responsebody=realutil.getNAERealResponse("src/test/resources/test_data/Valid_JSON.json").body().asString();
-		System.out.print(responsebody);
+		//String responsebody=realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST").body().asString();
+		//System.out.print(responsebody);
+		System.out.print(realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST").getStatusCode());
+		//Assert.assertEquals(realutil.getNAERealResponse("src/test/resources/test_data/Valid_JSON.json","POST").getStatusCode(),200);
 	}
 
 }
