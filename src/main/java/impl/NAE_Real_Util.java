@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TimeZone;
 
@@ -18,6 +20,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.testng.annotations.Test;
 
 import com.jayway.restassured.response.Response;
@@ -111,7 +114,9 @@ public class NAE_Real_Util {
 		String responsebody=response.body().asString();
 		ObjectMapper mapper=new ObjectMapper();
 		try {
-			NAE_Response_Body body=mapper.readValue(responsebody, NAE_Response_Body.class);
+			List<NAE_Response_Body> list = mapper.readValue(responsebody, new TypeReference<List<NAE_Response_Body>>() { });
+			//NAE_Response_Body[] array = mapper.readValue(responsebody, NAE_Response_Body[].class);
+			//System.out.println(list.get(0).getPayload().getGcm().getOtherdata().getMessage());
 			IsMapSuccess=true;
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block

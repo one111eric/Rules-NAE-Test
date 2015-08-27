@@ -1,6 +1,6 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Apns {
 private String alert;
@@ -8,10 +8,13 @@ private int badge;
 @JsonProperty("content-available")
 private int content_available;
 private int expires;
-@JsonProperty("loc_key")
+@JsonProperty("loc-key")
 private String loc_key;
 private String otherdata;
 private String sound;
+public Apns(){
+	
+}
 public String getAlert() {
 	return alert;
 }

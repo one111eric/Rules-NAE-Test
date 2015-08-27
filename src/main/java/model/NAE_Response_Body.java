@@ -1,5 +1,7 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class NAE_Response_Body {
 //private String message;
 //public String getMessage() {
@@ -12,19 +14,28 @@ public class NAE_Response_Body {
 //	this.message="";
 //}
 	//change response format
-	
+	@JsonProperty("notification.api")
 	private String Api;
+	@JsonProperty("notification.app.id")
 	private String App_id;
+	@JsonProperty("notification.endpoint")
 	private String Endpoint;
+	@JsonProperty("notification.handler")
 	private String Handler;
+	@JsonProperty("notification.headers")
 	private String Headers;
+	@JsonProperty("notification.payload")
 	private Payload payload;
+	@JsonProperty("notification.protocol")
 	private String protocol;
+	@JsonProperty("notification.verb")
 	private String verb;
+	@JsonProperty("tx.id")
 	private String tx_id;
 	public NAE_Response_Body(){
 		
 	}
+	
 	public String getApi() {
 		return Api;
 	}
