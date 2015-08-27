@@ -4,8 +4,7 @@ public class Data {
 	private long timestamp;
 	private String zone;
 	public Data(){
-		this.timestamp=1440016031;
-		this.zone="";
+		
 	}
 	public long getTimestamp() {
 		return timestamp;

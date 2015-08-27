@@ -1,21 +1,15 @@
 package glue;
 
 import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import impl.NAE_Real_Util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
+
 
 public class NAECucumberTestGlues {
 
@@ -26,8 +20,7 @@ public class NAECucumberTestGlues {
 	private static final String OVERSIZED_JSON = "test_data/Oversized_JSON.json";
 	private static final String VALID_JSON = "test_data/Valid_JSON.json";
 	private static final String INVALID_TYPE_JSON = "test_data/Invalid_Type.json";
-
-
+    
 	
 	@When("^I post an invalid json body")
 	public void InvalidJSON() {
@@ -71,11 +64,16 @@ public class NAECucumberTestGlues {
 	public void ValidJSON() {
         this.response=util.getNAERealResponse(VALID_JSON, "POST");
         this.path=new JsonPath(response.asString());
+        
 	}
 
 	@Then("^I should get a valid response body with corrent time$")
 	public void ValidJSONTest() {
+		
         Assert.assertTrue(util.mapResponse(response));
+        String expectedtime=util.ExpectedTime(VALID_JSON);
+        System.out.println(expectedtime);
+        Assert.assertTrue(response.body().asString().contains(expectedtime));
 	}
 
 	@When("^I post an valid json body with unsupported event type$")

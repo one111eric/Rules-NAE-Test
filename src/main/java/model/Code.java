@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Code {
-	private String type;
+	private String location;
 	private String app;
-    private String location;
-    private List<String> transport;
+	private String type;
+	private List<String> transport;
     private Params params;
     private Data data;
 	public Code() {
 		//this.zone="";
-		this.type="";
-		this.app="";
-		this.location="";
-		this.transport=new ArrayList<String>();
-		this.transport.add("emo");
-		this.params=new Params();
-		this.data=new Data();
-		data.setZone("front door");
+//		this.type="";
+//		this.app="";
+//		this.location="";
+//		this.transport=new ArrayList<String>();
+//		this.transport.add("emo");
+//		this.params=new Params();
+//		this.data=new Data();
+//		data.setZone("front door");
 			
 	}
     public String getApp() {

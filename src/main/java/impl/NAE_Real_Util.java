@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.TimeZone;
 
+
+
+
 import model.NAE_Request_Body;
 import model.NAE_Response_Body;
 
@@ -29,11 +32,12 @@ import com.jayway.restassured.http.ContentType;
 public class NAE_Real_Util {
 	private static final String NAE_URL = "http://eel.qa.rules.vacsv.com/notify";
 
-	//General Constructor
+	// General Constructor
 	public NAE_Real_Util() {
 
 	}
-   //A general method to read file to string
+
+	// A general method to read file to string
 	public String RequestBodyString(String filepath) {
 		String responsebody = "";
 		try {
@@ -45,7 +49,7 @@ public class NAE_Real_Util {
 		return responsebody;
 	}
 
-	//Method that get file from resources folder
+	// Method that get file from resources folder
 	private String getFile(String fileName) {
 		StringBuilder result = new StringBuilder("");
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -96,28 +100,55 @@ public class NAE_Real_Util {
 		}
 		return response;
 	}
-	
-	//Method to transform Unix millisecond timestamp to readable time based on Timezone
-	public String getTime(long timestamp,String timezone){
-        String timestring;
-		Date time=new Date(timestamp*1000);
+
+	// Method to transform Unix millisecond timestamp to readable time based on
+	// Timezone
+	public String TransformTime(long timestamp, String timezone) {
+		String timestring;
+		Date time = new Date(timestamp * 1000);
 		SimpleDateFormat formatter = new SimpleDateFormat("hh:mma");
-		TimeZone tz=TimeZone.getTimeZone(timezone);
+		TimeZone tz = TimeZone.getTimeZone(timezone);
 		formatter.setTimeZone(tz);
-		timestring=formatter.format(time);
-	    return timestring;
+		timestring = formatter.format(time).toLowerCase();
+		return timestring;
 	}
 	
-	//Method to map a json response to NAE_Response_Body object to test if response format matches expected format
-	public boolean mapResponse(Response response){
-		boolean IsMapSuccess=false;
-		String responsebody=response.body().asString();
-		ObjectMapper mapper=new ObjectMapper();
+	public String ExpectedTime(String requestfilepath){
+		String expectedtime="";
+		String requestbody=getFile(requestfilepath);
+		ObjectMapper mapper =new ObjectMapper();
 		try {
-			List<NAE_Response_Body> list = mapper.readValue(responsebody, new TypeReference<List<NAE_Response_Body>>() { });
-			//NAE_Response_Body[] array = mapper.readValue(responsebody, NAE_Response_Body[].class);
-			//System.out.println(list.get(0).getPayload().getGcm().getOtherdata().getMessage());
-			IsMapSuccess=true;
+			NAE_Request_Body newbody=mapper.readValue(requestbody, NAE_Request_Body.class);
+			long timestamp=newbody.getCode().getData().getTimestamp()/1000;
+			String timezone=newbody.getCode().getParams().getTimezone();
+            expectedtime=TransformTime(timestamp,timezone);		
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return expectedtime;
+		
+	}
+
+	// Method to map a json response to NAE_Response_Body object to test if
+	// response format matches expected format
+	public boolean mapResponse(Response response) {
+		boolean IsMapSuccess = false;
+		String responsebody = response.body().asString();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			List<NAE_Response_Body> list = mapper.readValue(responsebody,
+					new TypeReference<List<NAE_Response_Body>>() {
+					});
+			IsMapSuccess = true;
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,13 +161,11 @@ public class NAE_Real_Util {
 		}
 		return IsMapSuccess;
 	}
-	
-	
+
 	@Test
-	public void timetest() throws ParseException{
-	NAE_Real_Util util=new NAE_Real_Util();
-	String x=util.getTime(1428686740,"EST");
+	public void timetest() throws ParseException {
+		NAE_Real_Util util = new NAE_Real_Util();
+		System.out.println(util.ExpectedTime("test_data/Valid_JSON.json"));
 	}
-	
-	
+
 }
