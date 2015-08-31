@@ -22,13 +22,19 @@ Scenario Outline: Wrong request method
 		|DELETE|
 		
 Scenario: Valid Json request body and check timestamp Transformation 
-	When I post an valid json body with timestamp 
+	When I post an valid json body with timestamp
 	Then I should get a valid response body with corrent time 
 	
 Scenario: invalid/unsupported event type 
 	When I post an valid json body with unsupported event type 
 	Then I should get a blanket response with status 200
 	
-#Scenario: Send an valid Json request body 100 times to verify job queue won't be full
-#    When I post a valid json body 100 times without X-Debug header
-#    Then I should still get process successful message
+Scenario: Check mock server has received the request from NAE
+    When I post a valid body
+    Then I should see the number of the request log increased by 1
+    And the request body is in correct json payload format	
+	
+Scenario: Send an valid Json request body 100 times to verify job queue won't be full
+    When I post a valid json body 100 times without X-Debug header
+    Then I should still get process successful message
+

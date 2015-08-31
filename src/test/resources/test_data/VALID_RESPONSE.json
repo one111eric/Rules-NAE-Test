@@ -1,0 +1,13 @@
+[
+  {
+    "notification.api": "http",
+    "notification.app.id": "myapp",
+    "notification.endpoint": "http://mock.rules.vacsv.com:8080/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json",
+    "notification.handler": "ALARM_IN_PROGRESS_EMO",
+    "notification.headers": null,
+    "notification.payload": "{\"apns\":{\"alert\":\"Alarm at 12:25pm.\",\"badge\":1,\"content-available\":1,\"expires\":0,\"loc-key\":\"KEY\",\"otherdata\":\"ALARM_IN_PROGRESS\",\"sound\":\"alarm.was\"},\"gcm\":{\"collapse_key\":\"CollapseAlertsWith\",\"delay_while_idle\":false,\"otherdata\":{\"message\":\"Alarm at 12:25pm.\",\"title\":\"Alarm In Progress\"},\"time_to_live\":\"3600\"}}",
+    "notification.protocol": "http",
+    "notification.verb": "POST",
+    "tx.id": "3294c1de-8f72-4f54-80e8-96c35ffb94a2"
+  }
+]

@@ -1,6 +1,8 @@
 package impl;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.jayway.restassured.RestAssured.given;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,8 +18,13 @@ import java.util.TimeZone;
 
 
 
+
+
+
+
 import model.NAE_Request_Body;
 import model.NAE_Response_Body;
+import model.Payload;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -26,11 +33,17 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.testng.annotations.Test;
 
+import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.http.ContentType;
 
 public class NAE_Real_Util {
 	private static final String NAE_URL = "http://eel.qa.rules.vacsv.com/notify";
+	private static final String MOCK_SERVER="mock.rules.vacsv.com";
+	private static final int MOCK_SERVER_PORT=8080;
 
 	// General Constructor
 	public NAE_Real_Util() {
@@ -50,7 +63,7 @@ public class NAE_Real_Util {
 	}
 
 	// Method that get file from resources folder
-	private String getFile(String fileName) {
+	public String getFile(String fileName) {
 		StringBuilder result = new StringBuilder("");
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource(fileName).getFile());
@@ -129,6 +142,7 @@ public class NAE_Real_Util {
 				response.prettyPrint();
 			default:
 			}
+			
 		}
 		return response;
 	}
@@ -195,7 +209,70 @@ public class NAE_Real_Util {
 		}
 		return IsMapSuccess;
 	}
+	
+	public String getEndPoint(Response response){
+	    String url="";
+	    String responsebody = response.body().asString();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			List<NAE_Response_Body> list = mapper.readValue(responsebody,
+					new TypeReference<List<NAE_Response_Body>>() {
+					});
+			url=list.get(0).getEndpoint();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    		return url;
+	
+	}
+	
 
+	public int countRequests(String url){
+		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
+		List<LoggedRequest> reqs=findAll(builder);
+		
+		return reqs.size();
+	}
+	
+	public String getRequestPayload(String url){
+		String requestpayload="";
+		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
+		List<LoggedRequest> reqs=findAll(builder);
+		int count=reqs.size();
+		if(count>=1){
+			requestpayload=reqs.get(count-1).getBodyAsString();
+		}
+		return requestpayload;
+	}
+	
+	public boolean mapRequest(String requestpayload){
+		boolean IsMapSuccess=false;
+		ObjectMapper mapper=new ObjectMapper();
+		try {
+			Payload payload=mapper.readValue(requestpayload, Payload.class);
+			IsMapSuccess=true;
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return IsMapSuccess;
+	}
+	
 	@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();

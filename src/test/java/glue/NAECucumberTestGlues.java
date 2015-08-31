@@ -5,6 +5,7 @@ import org.testng.Assert;
 import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import impl.NAE_Real_Util;
@@ -23,6 +24,10 @@ public class NAECucumberTestGlues {
     private static final String EMPTY_JSON="test_data/Empty_JSON.json"; 
 	private static final boolean WITH_X_DEBUG_HEADER=true;
 	private static final boolean WITHOUT_X_DEBUG_HEADER=false;
+	private static final String MOCKSERVER_ADDRESS="http://mock.rules.vacsv.com:8080";
+	private String publishurl="";
+	private int beforerequest;
+	private int afterrequest;
     
 	@When("^I post an invalid json body")
 	public void InvalidJSON() {
@@ -66,7 +71,7 @@ public class NAECucumberTestGlues {
 	public void ValidJSON() {
         this.response=util.getNAERealResponse(VALID_JSON, "POST",WITH_X_DEBUG_HEADER);
         this.path=new JsonPath(response.asString());
-        
+        delay(10000);
 	}
 
 	@Then("^I should get a valid response body with corrent time$")
@@ -101,17 +106,59 @@ public class NAECucumberTestGlues {
 		Assert.assertEquals(path.get("error"), "empty body");
 	}
 	
-	@When("^I post a valid json body 100 times without X-Debug header$")
-	public void ValidJSONNoheader(){
-		this.response=util.getNAERealResponse(VALID_JSON, "POST", WITHOUT_X_DEBUG_HEADER);
+	@When("^I post a valid body$")
+	public void OneValidBody(){
+		this.response=util.getNAERealResponse(VALID_JSON, "POST",WITH_X_DEBUG_HEADER);
 		this.path=new JsonPath(response.asString());
-		Assert.assertEquals(response.getStatusCode(), 200);
-		Assert.assertEquals(path.get("status"), "processed");
 	}
-	@Then("^I should still get process successful message")
-	public void ValidJSONHundredTimesTest(){
-		for(int i=0;i<100;i++){
-			ValidJSONNoheader();
+	
+    @Then("^I should see the number of the request log increased by 1$")
+    public void RequestsCount(){
+    	
+    	String endpoint=util.getEndPoint(response);
+		this.publishurl=endpoint.replace(MOCKSERVER_ADDRESS, "");
+		Assert.assertNotEquals(publishurl, "");
+		//delay(10000);
+    	System.out.println(publishurl);
+        beforerequest=util.countRequests(publishurl);
+        System.out.println(beforerequest);
+        
+        this.response=util.getNAERealResponse(VALID_JSON, "POST", WITHOUT_X_DEBUG_HEADER);
+        delay(10000);
+		afterrequest=util.countRequests(publishurl);
+		delay(5000);
+		System.out.println(afterrequest);
+		int increased=afterrequest-beforerequest;
+		Assert.assertEquals(increased, 1);
+    }
+    
+    @And("^the request body is in correct json payload format$")
+    public void ValidPayload(){
+    	
+    	String requestpayload=util.getRequestPayload(publishurl);
+    	Assert.assertTrue(util.mapRequest(requestpayload));
+    }
+    
+    @When("^I post a valid json body 100 times without X-Debug header$")
+    public void ValidJSONOneTime(){
+    	this.response=util.getNAERealResponse(VALID_JSON, "POST",WITHOUT_X_DEBUG_HEADER);
+        this.path=new JsonPath(response.asString());
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(path.get("status"), "processed");
+        delay(1000);
+    }
+    @Then("^I should still get process successful message$")
+    public void ValidJSONHundredTime(){
+    	for(int i=0;i<100;i++){
+    		ValidJSONOneTime();
+    	}
+    }
+    public void delay(int n){
+    	try {
+			Thread.sleep(n);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
+    }
 }
