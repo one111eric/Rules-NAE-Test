@@ -67,8 +67,9 @@ public class NAE_Real_Util {
 	}
 
 	// Method getting response from NAE Api, using X-Debug header true
-	public Response getNAERealResponse(String filepath, String Verb) {
+	public Response getNAERealResponse(String filepath, String Verb, boolean Header) {
 		Response response = null;
+		if(Header)
 		switch (Verb) {
 		case "POST":
 			response = given().log().all().header("X-Debug", true)
@@ -98,8 +99,41 @@ public class NAE_Real_Util {
 			response.prettyPrint();
 		default:
 		}
+		else{
+			switch (Verb) {
+			case "POST":
+				response = given().log().all()
+						.body(getFile(filepath))
+						// .expect().statusCode(200)
+						.post(NAE_URL);
+				response.prettyPrint();
+				break;
+			case "GET":
+				response = given().log().all()
+				// .expect().statusCode(200)
+						.get(NAE_URL);
+				response.prettyPrint();
+				break;
+			case "PUT":
+				response = given().log().all()
+						.body(getFile(filepath))
+						// .expect().statusCode(200)
+						.put(NAE_URL);
+				response.prettyPrint();
+				break;
+			case "DELETE":
+				response = given().log().all()
+						.body(getFile(filepath))
+						// .expect().statusCode(200)
+						.delete(NAE_URL);
+				response.prettyPrint();
+			default:
+			}
+		}
 		return response;
 	}
+	
+	
 
 	// Method to transform Unix millisecond timestamp to readable time based on
 	// Timezone

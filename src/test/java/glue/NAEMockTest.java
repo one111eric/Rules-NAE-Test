@@ -90,7 +90,7 @@ public class NAEMockTest {
 	public void realtest(){
 		//String responsebody=realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST").body().asString();
 		//System.out.print(responsebody);
-		System.out.print(realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST").getStatusCode());
+		System.out.print(realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST",true).getStatusCode());
 		//Assert.assertEquals(realutil.getNAERealResponse("src/test/resources/test_data/Valid_JSON.json","POST").getStatusCode(),200);
 	}
 
