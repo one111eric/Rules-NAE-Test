@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Code {
 	private String location;
-	private String app;
+	private String tenant;
 	private String type;
 	private List<String> transport;
     private Params params;
@@ -22,12 +22,12 @@ public class Code {
 //		data.setZone("front door");
 			
 	}
-    public String getApp() {
-		return app;
+    public String getTenant() {
+		return tenant;
 	}
 
-	public void setApp(String app) {
-		this.app = app;
+	public void setTenant(String tenant) {
+		this.tenant = tenant;
 	}
 
 	public String getLocation() {

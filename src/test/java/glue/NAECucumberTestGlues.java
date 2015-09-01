@@ -71,7 +71,7 @@ public class NAECucumberTestGlues {
 	public void ValidJSON() {
         this.response=util.getNAERealResponse(VALID_JSON, "POST",WITH_X_DEBUG_HEADER);
         this.path=new JsonPath(response.asString());
-        delay(10000);
+        delay(30000);
 	}
 
 	@Then("^I should get a valid response body with corrent time$")
@@ -124,7 +124,7 @@ public class NAECucumberTestGlues {
         System.out.println(beforerequest);
         
         this.response=util.getNAERealResponse(VALID_JSON, "POST", WITHOUT_X_DEBUG_HEADER);
-        delay(10000);
+        delay(30000);
 		afterrequest=util.countRequests(publishurl);
 		delay(5000);
 		System.out.println(afterrequest);
@@ -152,6 +152,17 @@ public class NAECucumberTestGlues {
     	for(int i=0;i<100;i++){
     		ValidJSONOneTime();
     	}
+    }
+    
+    @When("^I check the number of notification request")
+    public void CheckRequestNumber(){
+    	this.publishurl="/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
+    }
+    @Then("^I should get the number")
+    public void GetRequestNumber(){
+    	
+    	int requestnumber=util.countRequests(publishurl);
+    	System.out.println("Number of Notification sent to Mock Server: "+requestnumber);
     }
     public void delay(int n){
     	try {

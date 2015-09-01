@@ -16,8 +16,8 @@ public class NAE_Response_Body {
 	//change response format
 	@JsonProperty("notification.api")
 	private String Api;
-	@JsonProperty("notification.app.id")
-	private String App_id;
+	@JsonProperty("notification.tenant.id")
+	private String Tenant_id;
 	@JsonProperty("notification.endpoint")
 	private String Endpoint;
 	@JsonProperty("notification.handler")
@@ -42,11 +42,11 @@ public class NAE_Response_Body {
 	public void setApi(String api) {
 		Api = api;
 	}
-	public String getApp_id() {
-		return App_id;
+	public String getTenant_id() {
+		return Tenant_id;
 	}
-	public void setApp_id(String app_id) {
-		App_id = app_id;
+	public void setTenant_id(String app_id) {
+		Tenant_id = app_id;
 	}
 	public String getEndpoint() {
 		return Endpoint;

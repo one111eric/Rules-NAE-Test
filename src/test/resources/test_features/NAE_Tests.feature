@@ -34,7 +34,7 @@ Scenario: Check mock server has received the request from NAE
     Then I should see the number of the request log increased by 1
     And the request body is in correct json payload format	
 	
-Scenario: Send an valid Json request body 100 times to verify job queue won't be full
-    When I post a valid json body 100 times without X-Debug header
-    Then I should still get process successful message
+#Scenario: Send an valid Json request body 100 times to verify job queue won't be full
+#    When I post a valid json body 100 times without X-Debug header
+#    Then I should still get process successful message
 

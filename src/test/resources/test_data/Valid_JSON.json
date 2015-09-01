@@ -1,7 +1,7 @@
 { "code" :
   {
       "location": "209052550323032015Comcast.cust",
-      "app": "myapp",
+      "tenant": "xh",
       "type": "ALARM_IN_PROGRESS",
       "transport": [
           "emo"
