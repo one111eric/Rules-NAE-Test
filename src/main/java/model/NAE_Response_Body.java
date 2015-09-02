@@ -2,17 +2,14 @@ package model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+/**
+ * Class for NAE response json body
+ *
+ * @author Miao Xiang
+ *
+ */
 public class NAE_Response_Body {
-//private String message;
-//public String getMessage() {
-//	return message;
-//}
-//public void setMessage(String message) {
-//	this.message = message;
-//}
-//public NAE_Response_Body(){
-//	this.message="";
-//}
+
 	//change response format
 	@JsonProperty("notification.api")
 	private String Api;

@@ -1,8 +1,13 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for code object in NAE request
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Code {
 	private String location;
 	private String tenant;

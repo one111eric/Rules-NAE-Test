@@ -1,5 +1,10 @@
 package model;
-
+/**
+ * Class for Params object in NAE request
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Params {
 private String topic;
 private String phone;

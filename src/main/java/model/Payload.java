@@ -1,16 +1,22 @@
 package model;
 
 import java.io.IOException;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+/**
+ * Class for Payload object in NAE response
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Payload {
 	public Payload(){
 		
 	}
+	//Constructor with string parameter to avoid mapping error
     public Payload(String x) throws JsonParseException, JsonMappingException, IOException
     {   
     	ObjectMapper mapper=new ObjectMapper();

@@ -1,5 +1,10 @@
 package model;
-
+/**
+ * Class for gcm object in NAE response
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Gcm {
 	private String collapse_key;
 	private boolean delay_while_idle;

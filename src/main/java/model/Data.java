@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * Class for data object in NAE request
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Data {
 	private long timestamp;
 	private String zone;

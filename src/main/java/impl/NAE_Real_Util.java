@@ -9,24 +9,14 @@ import java.io.IOException;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TimeZone;
-
-
-
-
-
-
-
-
 import model.NAE_Request_Body;
 import model.NAE_Response_Body;
 import model.Payload;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,7 +28,13 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.jayway.restassured.response.Response;
-import com.jayway.restassured.http.ContentType;
+
+/**
+ * Class for Genaral NAE action needs
+ *
+ * @author Miao Xiang
+ *
+ */
 
 public class NAE_Real_Util {
 	private static final String NAE_URL = "http://eel.qa.rules.vacsv.com/notify";
@@ -79,7 +75,7 @@ public class NAE_Real_Util {
 		return result.toString();
 	}
 
-	// Method getting response from NAE Api, using X-Debug header true
+	// Method getting response from NAE Api, using X-Debug header or not
 	public Response getNAERealResponse(String filepath, String Verb, boolean Header) {
 		Response response = null;
 		if(Header)
@@ -87,27 +83,23 @@ public class NAE_Real_Util {
 		case "POST":
 			response = given().log().all().header("X-Debug", true)
 					.body(getFile(filepath))
-					// .expect().statusCode(200)
 					.post(NAE_URL);
 			response.prettyPrint();
 			break;
 		case "GET":
 			response = given().log().all().header("X-Debug", true)
-			// .expect().statusCode(200)
 					.get(NAE_URL);
 			response.prettyPrint();
 			break;
 		case "PUT":
 			response = given().log().all().header("X-Debug", true)
 					.body(getFile(filepath))
-					// .expect().statusCode(200)
 					.put(NAE_URL);
 			response.prettyPrint();
 			break;
 		case "DELETE":
 			response = given().log().all().header("X-Debug", true)
 					.body(getFile(filepath))
-					// .expect().statusCode(200)
 					.delete(NAE_URL);
 			response.prettyPrint();
 		default:
@@ -117,36 +109,30 @@ public class NAE_Real_Util {
 			case "POST":
 				response = given().log().all()
 						.body(getFile(filepath))
-						// .expect().statusCode(200)
 						.post(NAE_URL);
 				response.prettyPrint();
 				break;
 			case "GET":
 				response = given().log().all()
-				// .expect().statusCode(200)
 						.get(NAE_URL);
 				response.prettyPrint();
 				break;
 			case "PUT":
 				response = given().log().all()
 						.body(getFile(filepath))
-						// .expect().statusCode(200)
 						.put(NAE_URL);
 				response.prettyPrint();
 				break;
 			case "DELETE":
 				response = given().log().all()
 						.body(getFile(filepath))
-						// .expect().statusCode(200)
 						.delete(NAE_URL);
 				response.prettyPrint();
 			default:
 			}
-			
 		}
 		return response;
-	}
-	
+	}	
 	
 
 	// Method to transform Unix millisecond timestamp to readable time based on
@@ -161,6 +147,7 @@ public class NAE_Real_Util {
 		return timestring;
 	}
 	
+	//Method getting the expected time from timestamp in request json
 	public String ExpectedTime(String requestfilepath){
 		String expectedtime="";
 		String requestbody=getFile(requestfilepath);
@@ -171,19 +158,13 @@ public class NAE_Real_Util {
 			String timezone=newbody.getCode().getParams().getTimezone();
             expectedtime=TransformTime(timestamp,timezone);		
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		return expectedtime;
-		
 	}
 
 	// Method to map a json response to NAE_Response_Body object to test if
@@ -198,18 +179,16 @@ public class NAE_Real_Util {
 					});
 			IsMapSuccess = true;
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return IsMapSuccess;
 	}
 	
+	//Get the endpoint field value from NAE response
 	public String getEndPoint(Response response){
 	    String url="";
 	    String responsebody = response.body().asString();
@@ -220,20 +199,16 @@ public class NAE_Real_Util {
 					});
 			url=list.get(0).getEndpoint();
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    		return url;
-	
 	}
 	
-
+    //Get the request count sent to the mock server based on requested url
 	public int countRequests(String url){
 		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
 		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
@@ -242,6 +217,7 @@ public class NAE_Real_Util {
 		return reqs.size();
 	}
 	
+	//Get the payload object in the request sent to the mock server
 	public String getRequestPayload(String url){
 		String requestpayload="";
 		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
@@ -254,6 +230,8 @@ public class NAE_Real_Util {
 		return requestpayload;
 	}
 	
+	//Method trying to map request into NAE request object,return false if fail
+	//to map
 	public boolean mapRequest(String requestpayload){
 		boolean IsMapSuccess=false;
 		ObjectMapper mapper=new ObjectMapper();
@@ -261,19 +239,17 @@ public class NAE_Real_Util {
 			Payload payload=mapper.readValue(requestpayload, Payload.class);
 			IsMapSuccess=true;
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return IsMapSuccess;
 	}
 	
-	@Test
+	//a simple unit test for time transform method
+	//@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();
 		System.out.println(util.ExpectedTime("test_data/Valid_JSON.json"));

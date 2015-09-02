@@ -1,5 +1,10 @@
 package model;
-
+/**
+ * Class for otherdata object in NAE response
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Otherdata {
 	public Otherdata(){
 	}

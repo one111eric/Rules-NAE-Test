@@ -1,7 +1,12 @@
 package model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-
+/**
+ * Class for Apns object in NAE response
+ *
+ * @author Miao Xiang
+ *
+ */
 public class Apns {
 private String alert;
 private int badge;
