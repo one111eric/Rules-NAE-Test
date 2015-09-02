@@ -37,10 +37,11 @@ import com.jayway.restassured.response.Response;
  */
 
 public class NAE_Real_Util {
-	private static final String NAE_URL = "http://eel.qa.rules.vacsv.com/notify";
-	private static final String MOCK_SERVER="mock.rules.vacsv.com";
-	private static final int MOCK_SERVER_PORT=8080;
 
+    private static final String NAE_URL=NAE_Properties.NAE_URL;
+    private static final String MOCK_SERVER=NAE_Properties.MOCK_SERVER;
+    private static final int MOCK_SERVER_PORT=NAE_Properties.MOCK_SERVER_PORT;
+	 
 	// General Constructor
 	public NAE_Real_Util() {
 

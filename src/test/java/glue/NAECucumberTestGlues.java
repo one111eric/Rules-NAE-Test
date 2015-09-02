@@ -9,6 +9,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import impl.NAE_Real_Util;
+import impl.NAE_Properties;
 
 /**
  * Class for NAE test glues
@@ -20,15 +21,12 @@ import impl.NAE_Real_Util;
 public class NAECucumberTestGlues {
 
 	
-	//define Test Json files
+	//define Test Json files (test data)
 	private static final String INVALID_JSON = "test_data/Invalid_JSON.json";
 	private static final String OVERSIZED_JSON = "test_data/Oversized_JSON.json";
 	private static final String VALID_JSON = "test_data/Valid_JSON.json";
 	private static final String INVALID_TYPE_JSON = "test_data/Invalid_Type.json";
 	private static final String EMPTY_JSON = "test_data/Empty_JSON.json";
-	private static final boolean WITH_X_DEBUG_HEADER = true;
-	private static final boolean WITHOUT_X_DEBUG_HEADER = false;
-	private static final String MOCKSERVER_ADDRESS = "http://mock.rules.vacsv.com:8080";
 	
 	//variable will be used for tests
 	private NAE_Real_Util util = new NAE_Real_Util();
@@ -41,7 +39,7 @@ public class NAECucumberTestGlues {
 	@When("^I post an invalid json body")
 	public void InvalidJSON() {
 		this.response = util.getNAERealResponse(INVALID_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -54,7 +52,7 @@ public class NAECucumberTestGlues {
 	@When("^I post a Json file exceeding the character limit$")
 	public void LargeJSON() {
 		this.response = util.getNAERealResponse(OVERSIZED_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -68,7 +66,7 @@ public class NAECucumberTestGlues {
 	@When("^I make the http request with Verb \"([^\"]*)\"$")
 	public void WrongVerb(String verb) {
 		this.response = util.getNAERealResponse(VALID_JSON, verb,
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -81,7 +79,7 @@ public class NAECucumberTestGlues {
 	@When("^I post an valid json body with timestamp$")
 	public void ValidJSON() {
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 		delay(30000);
 	}
@@ -98,7 +96,7 @@ public class NAECucumberTestGlues {
 	@When("^I post an valid json body with unsupported event type$")
 	public void WrongType() {
 		this.response = util.getNAERealResponse(INVALID_TYPE_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -114,7 +112,7 @@ public class NAECucumberTestGlues {
 	@When("^I post an empty json body$")
 	public void EmptyJSON() {
 		this.response = util.getNAERealResponse(EMPTY_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -127,7 +125,7 @@ public class NAECucumberTestGlues {
 	@When("^I post a valid body$")
 	public void OneValidBody() {
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
-				WITH_X_DEBUG_HEADER);
+				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 	}
 
@@ -135,7 +133,7 @@ public class NAECucumberTestGlues {
 	public void RequestsCount() {
 
 		String endpoint = util.getEndPoint(response);
-		this.publishurl = endpoint.replace(MOCKSERVER_ADDRESS, "");
+		this.publishurl = endpoint.replace(NAE_Properties.MOCKSERVER_ADDRESS, "");
 		Assert.assertNotEquals(publishurl, "");
 		// delay(10000);
 		System.out.println(publishurl);
@@ -143,7 +141,7 @@ public class NAECucumberTestGlues {
 		System.out.println(beforerequest);
 
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
-				WITHOUT_X_DEBUG_HEADER);
+				NAE_Properties.WITHOUT_X_DEBUG_HEADER);
 		delay(30000);
 		afterrequest = util.countRequests(publishurl);
 		delay(5000);
@@ -162,7 +160,7 @@ public class NAECucumberTestGlues {
 	@When("^I post a valid json body 100 times without X-Debug header$")
 	public void ValidJSONOneTime() {
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
-				WITHOUT_X_DEBUG_HEADER);
+				NAE_Properties.WITHOUT_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertEquals(path.get("status"), "processed");
