@@ -6,6 +6,9 @@ package model;
  *
  */
 public class Gcm {
+	/**
+     * all fields/objects included in Gcm object
+     */
 	private String collapse_key;
 	private boolean delay_while_idle;
 	private Otherdata otherdata;

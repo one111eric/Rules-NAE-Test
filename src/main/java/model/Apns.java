@@ -8,6 +8,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  */
 public class Apns {
+	/**
+     * all fields/objects included in apn object
+     */
 private String alert;
 private int badge;
 @JsonProperty("content-available")

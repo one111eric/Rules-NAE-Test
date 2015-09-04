@@ -7,6 +7,9 @@ package model;
  *
  */
 public class Data {
+	/**
+     * all fields/objects included in data object
+     */
 	private long timestamp;
 	private String zone;
 	public Data(){

@@ -9,7 +9,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  */
 public class NAE_Response_Body {
-
+	/**
+     * all fields/objects included in NAE response
+     */
 	//change response format
 	@JsonProperty("notification.api")
 	private String Api;

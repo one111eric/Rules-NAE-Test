@@ -9,6 +9,9 @@ import java.util.List;
  *
  */
 public class Code {
+	/**
+     * all fields/objects included in code object
+     */
 	private String location;
 	private String tenant;
 	private String type;

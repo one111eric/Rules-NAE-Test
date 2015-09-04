@@ -6,6 +6,9 @@ package model;
  *
  */
 public class Params {
+	/**
+     * all fields/objects included in params object
+     */
 private String topic;
 private String phone;
 private String email;

@@ -52,20 +52,30 @@ public class NAE_Real_Util {
 
 	}
 
-	// A general method to read file to string
-	public String requestBodyString(String filepath) {
+	
+	/**
+     * A general method to read file to string
+     * @param filepath: target file path
+     * @return String: JSON body as a string
+     */
+	public String requestBodyString(String filePath) {
 		String responsebody = "";
 		try {
-			responsebody = new Scanner(new File(filepath)).useDelimiter("\\Z")
+			responsebody = new Scanner(new File(filePath)).useDelimiter("\\Z")
 					.next();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			//LOGGER.error(e);
+			
+			LOGGER.error(e);
 		}
 		return responsebody;
 	}
 
 	// Method that get file from resources folder
+	/**
+     * Method that get file from resources folder
+     * @param fileName: file name in resources folder
+     * @return String: JSON body as a string
+     */
 	public String getFile(String fileName) {
 		StringBuilder result = new StringBuilder("");
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -77,20 +87,26 @@ public class NAE_Real_Util {
 			}
 			scanner.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			//LOGGER.error(e);
+			LOGGER.error(e);
 		}
 		return result.toString();
 	}
 
-	// Method getting response from NAE Api, using X-Debug header or not
-	public Response getNAERealResponse(String filepath, String Verb, boolean Header) {
+	
+	/**
+     * Method getting response from NAE Api
+     * @param filePath: request json body file
+     * @param verb: HTTP request method
+     * @param header: True or False depends on if X-Debug header is included
+     * @return Response: RestAssured response
+     */
+	public Response getNAERealResponse(String filePath, String verb, boolean header) {
 		Response response = null;
-		if(Header){
-		switch (Verb) {
+		if(header){
+		switch (verb) {
 		case "POST":
 			response = given().log().all().header("X-Debug", true)
-					.body(getFile(filepath))
+					.body(getFile(filePath))
 					.post(NAE_URL);
 			response.prettyPrint();
 			break;
@@ -101,23 +117,23 @@ public class NAE_Real_Util {
 			break;
 		case "PUT":
 			response = given().log().all().header("X-Debug", true)
-					.body(getFile(filepath))
+					.body(getFile(filePath))
 					.put(NAE_URL);
 			response.prettyPrint();
 			break;
 		case "DELETE":
 			response = given().log().all().header("X-Debug", true)
-					.body(getFile(filepath))
+					.body(getFile(filePath))
 					.delete(NAE_URL);
 			response.prettyPrint();
 		default:
 		}
 		}
 		else{
-			switch (Verb) {
+			switch (verb) {
 			case "POST":
 				response = given().log().all()
-						.body(getFile(filepath))
+						.body(getFile(filePath))
 						.post(NAE_URL);
 				response.prettyPrint();
 				break;
@@ -128,13 +144,13 @@ public class NAE_Real_Util {
 				break;
 			case "PUT":
 				response = given().log().all()
-						.body(getFile(filepath))
+						.body(getFile(filePath))
 						.put(NAE_URL);
 				response.prettyPrint();
 				break;
 			case "DELETE":
 				response = given().log().all()
-						.body(getFile(filepath))
+						.body(getFile(filePath))
 						.delete(NAE_URL);
 				response.prettyPrint();
 			default:
@@ -144,118 +160,138 @@ public class NAE_Real_Util {
 	}	
 	
 
-	// Method to transform Unix millisecond timestamp to readable time based on
-	// Timezone
-	public String transformTime(long timestamp, String timezone) {
-		String timestring;
-		Date time = new Date(timestamp * 1000);
+	/**
+     * Method to transform Unix millisecond timestamp to readable time based on Timezone
+     * @param timestamp: Unix timestamp in millisecond
+     * @param timeZone: Timezone like "PST" "EST"
+     * @return String: readable time string
+     */
+	public String transformTime(long timeStamp, String timeZone) {
+		String timeString;
+		Date time = new Date(timeStamp * 1000);
 		SimpleDateFormat formatter = new SimpleDateFormat("hh:mma");
-		TimeZone tz = TimeZone.getTimeZone(timezone);
+		TimeZone tz = TimeZone.getTimeZone(timeZone);
 		formatter.setTimeZone(tz);
-		timestring = formatter.format(time).toLowerCase();
-		return timestring;
+		timeString = formatter.format(time).toLowerCase();
+		return timeString;
 	}
 	
-	//Method getting the expected time from timestamp in request json
-	public String expectedTime(String requestfilepath){
+	
+	/**
+     * Method getting the expected time from timestamp in request json body
+     * @param requestFilePath: request json body file
+     * @return String: expected time string for verification in test
+     */
+	public String expectedTime(String requestFilePath){
 		String expectedtime="";
-		String requestbody=getFile(requestfilepath);
+		String requestBody=getFile(requestFilePath);
 		ObjectMapper mapper =new ObjectMapper();
 		try {
-			NAE_Request_Body newbody=mapper.readValue(requestbody, NAE_Request_Body.class);
+			NAE_Request_Body newbody=mapper.readValue(requestBody, NAE_Request_Body.class);
 			long timestamp=newbody.getCode().getData().getTimestamp()/1000;
 			String timezone=newbody.getCode().getParams().getTimezone();
             expectedtime=transformTime(timestamp,timezone);		
 		} catch (JsonParseException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (IOException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		}
 		return expectedtime;
 	}
 
-	// Method to map a json response to NAE_Response_Body object to test if
-	// response format matches expected format
+	/**
+     * Method to map a json response to NAE_Response_Body object to test if response format match expected formate
+     * @param Response: response getting from NAE api
+     * @return boolean: true or false to determine if successful
+     */
 	public boolean mapResponse(Response response) {
-		boolean IsMapSuccess = false;
-		String responsebody = response.body().asString();
+		boolean isMapSuccess = false;
+		String responseBody = response.body().asString();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			List<NAE_Response_Body> list = mapper.readValue(responsebody,
+			List<NAE_Response_Body> list = mapper.readValue(responseBody,
 					new TypeReference<List<NAE_Response_Body>>() {
 					});
-			IsMapSuccess = true;
+			isMapSuccess = true;
 		} catch (JsonParseException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (IOException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		}
-		return IsMapSuccess;
+		return isMapSuccess;
 	}
 	
-	//Get the endpoint field value from NAE response
+	/**
+     * Method getting response from NAE Api
+     * @param Response: Json response from NAE api
+     * @return String: "endpoint" field value in response body
+     */
 	public String getEndPoint(Response response){
 	    String url="";
-	    String responsebody = response.body().asString();
+	    String responseBody = response.body().asString();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			List<NAE_Response_Body> list = mapper.readValue(responsebody,
+			List<NAE_Response_Body> list = mapper.readValue(responseBody,
 					new TypeReference<List<NAE_Response_Body>>() {
 					});
 			url=list.get(0).getEndpoint();
 		} catch (JsonParseException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		} catch (IOException e) {
-			//e.printStackTrace();
 			LOGGER.error(e);
 		}
 	    		return url;
 	}
 	
-    //Get the request count sent to the mock server based on requested url
+	/**
+     * Method getting the request count sent to the mock server based on requested URL
+     * @param url: requested URL from NAE
+     * @return int: number of requests
+     */
 	public int countRequests(String url){
 		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
 		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
 		List<LoggedRequest> reqs=findAll(builder);
-		
 		return reqs.size();
 	}
 	
 	//Get the payload object in the request sent to the mock server
+	/**
+     * Method getting the payload object in the request sent tot the mock server
+     * @param url: requested URL from NAE
+     * @return String: payload object mapped into a string
+     */
 	public String getRequestPayload(String url){
-		String requestpayload="";
+		String requestPayload="";
 		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
 		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
 		List<LoggedRequest> reqs=findAll(builder);
 		int count=reqs.size();
 		if(count>=1){
-			requestpayload=reqs.get(count-1).getBodyAsString();
+			requestPayload=reqs.get(count-1).getBodyAsString();
 		}
-		return requestpayload;
+		return requestPayload;
 	}
 	
 	//Method trying to map request into NAE request object,return false if fail
 	//to map
-	public boolean mapRequest(String requestpayload){
-		boolean IsMapSuccess=false;
+	/**
+     * Method mapping request into NAE request object, return false if fail
+     * @param String: request json payload
+     * @return boolean: True of False to determine if successful
+     */
+	public boolean mapRequest(String requestPayload){
+		boolean isMapSuccess=false;
 		ObjectMapper mapper=new ObjectMapper();
 		try {
-			Payload payload=mapper.readValue(requestpayload, Payload.class);
-			IsMapSuccess=true;
+			Payload payload=mapper.readValue(requestPayload, Payload.class);
+			isMapSuccess=true;
 		} catch (JsonParseException e) {
 			//e.printStackTrace();
 			LOGGER.error(e);
@@ -266,15 +302,14 @@ public class NAE_Real_Util {
 			//e.printStackTrace();
 			LOGGER.error(e);
 		}
-		return IsMapSuccess;
+		return isMapSuccess;
 	}
 	
 	//a simple unit test for time transform method
 	//@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();
-		System.out.println(util.expectedTime("test_data/Valid_JSON.json"));
-		//LOGGER.log(p, util.ExpectedTime("test_data/Valid_JSON.json"));
+		LOGGER.debug(util.expectedTime("test_data/Valid_JSON.json"));
 	}
 
 }

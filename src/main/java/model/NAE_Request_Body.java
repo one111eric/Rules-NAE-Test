@@ -7,6 +7,9 @@ package model;
  *
  */
 public class NAE_Request_Body {
+	/**
+     * a code object is wrapped in the request sent to NAE
+     */
 	private Code code;
 	public NAE_Request_Body()
 	{

@@ -13,6 +13,13 @@ import org.codehaus.jackson.map.ObjectMapper;
  *
  */
 public class Payload {
+	/**
+     * all fields/objects included in payload object
+     */
+	@JsonProperty("apns")
+	private Apns apns;
+    @JsonProperty("gcm")
+	private Gcm gcm;
 	public Payload(){
 		
 	}
@@ -24,10 +31,7 @@ public class Payload {
     	this.apns=payload.getApns();
     	this.gcm=payload.getGcm();
     }
-    @JsonProperty("apns")
-	private Apns apns;
-    @JsonProperty("gcm")
-	private Gcm gcm;
+    
 	public Apns getApns() {
 		return apns;
 	}

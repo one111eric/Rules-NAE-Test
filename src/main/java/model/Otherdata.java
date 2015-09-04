@@ -6,6 +6,9 @@ package model;
  *
  */
 public class Otherdata {
+	/**
+     * all fields/objects included in otherdata object
+     */
 	public Otherdata(){
 	}
 	
