@@ -1,3 +1,4 @@
+@CheckNumber
 Feature: Check the number of notification request sent to mock server
 
 Scenario: 

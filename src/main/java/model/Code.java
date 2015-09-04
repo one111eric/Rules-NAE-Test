@@ -16,15 +16,6 @@ public class Code {
     private Params params;
     private Data data;
 	public Code() {
-		//this.zone="";
-//		this.type="";
-//		this.app="";
-//		this.location="";
-//		this.transport=new ArrayList<String>();
-//		this.transport.add("emo");
-//		this.params=new Params();
-//		this.data=new Data();
-//		data.setZone("front door");
 			
 	}
     public String getTenant() {

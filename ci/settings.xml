@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <mirrors>
+    <mirror>
+      <!-- This sends everything else to /public -->
+      <id>nexus</id>
+      <mirrorOf>*,!maven2-repository.dev.java.net</mirrorOf>
+      <url>http://nexus.cvs.ula.comcast.net:8081/nexus/content/groups/public</url>
+    </mirror>
+  </mirrors>
+  <profiles>
+    <profile>
+      <id>nexus</id>
+      <!-- Enable snapshots for the built in central repo to direct -->
+      <!-- all requests to nexus via the mirror -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <!-- make the profile active all the time -->
+    <activeProfile>nexus</activeProfile>
+  </activeProfiles>
+  <pluginGroups>
+    <pluginGroup>com.tvworks.tva</pluginGroup>
+    <pluginGroup>org.sonatype.plugins</pluginGroup>
+    <pluginGroup>com.tvworks.tva.maven.plugins</pluginGroup>
+    <pluginGroup>net.sf.doodleproject</pluginGroup>
+    <pluginGroup>org.mortbay.jetty</pluginGroup>
+    <pluginGroup>org.codehaus.mojo</pluginGroup>
+    <pluginGroup>org.jvnet.hudson.tools</pluginGroup>
+    <pluginGroup>triemax</pluginGroup>
+    <pluginGroup>com.comcast.video</pluginGroup>
+  </pluginGroups>
+  <servers>
+    <server>
+      <id>snapshots</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>releases</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>cvs-snapshot-site</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>cvs-release-site</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>thirdparty</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>st-net</id>
+      <username>builder</username>
+      <password>builder</password>
+    </server>
+    <server>
+      <id>stnet</id>
+      <username>builder</username>
+      <password>builder</password>
+    </server>
+    <server>
+      <id>client</id>
+      <username>docs</username>
+      <password>docs3030</password>
+    </server>
+
+    <!-- Staging Repositories -->
+    <server>
+      <id>dev-test</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>prod-release</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>prod-ready</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+    <server>
+      <id>qa-test</id>
+      <username>deployment</username>
+      <password>deploy123</password>
+    </server>
+
+  </servers>
+</settings>
+

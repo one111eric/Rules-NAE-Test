@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TimeZone;
+
 import model.NAE_Request_Body;
 import model.NAE_Response_Body;
 import model.Payload;
@@ -23,12 +24,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.testng.annotations.Test;
 
+
 import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.jayway.restassured.response.Response;
 
+import org.apache.log4j.Logger;
 /**
  * Class for Genaral NAE action needs
  *
@@ -41,20 +44,23 @@ public class NAE_Real_Util {
     private static final String NAE_URL=NAE_Properties.NAE_URL;
     private static final String MOCK_SERVER=NAE_Properties.MOCK_SERVER;
     private static final int MOCK_SERVER_PORT=NAE_Properties.MOCK_SERVER_PORT;
-	 
+	
+    //Logger instance
+    private static final Logger LOGGER = Logger.getLogger(NAE_Real_Util.class);
 	// General Constructor
 	public NAE_Real_Util() {
 
 	}
 
 	// A general method to read file to string
-	public String RequestBodyString(String filepath) {
+	public String requestBodyString(String filepath) {
 		String responsebody = "";
 		try {
 			responsebody = new Scanner(new File(filepath)).useDelimiter("\\Z")
 					.next();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			//LOGGER.error(e);
 		}
 		return responsebody;
 	}
@@ -72,6 +78,7 @@ public class NAE_Real_Util {
 			scanner.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			//LOGGER.error(e);
 		}
 		return result.toString();
 	}
@@ -79,7 +86,7 @@ public class NAE_Real_Util {
 	// Method getting response from NAE Api, using X-Debug header or not
 	public Response getNAERealResponse(String filepath, String Verb, boolean Header) {
 		Response response = null;
-		if(Header)
+		if(Header){
 		switch (Verb) {
 		case "POST":
 			response = given().log().all().header("X-Debug", true)
@@ -104,6 +111,7 @@ public class NAE_Real_Util {
 					.delete(NAE_URL);
 			response.prettyPrint();
 		default:
+		}
 		}
 		else{
 			switch (Verb) {
@@ -138,7 +146,7 @@ public class NAE_Real_Util {
 
 	// Method to transform Unix millisecond timestamp to readable time based on
 	// Timezone
-	public String TransformTime(long timestamp, String timezone) {
+	public String transformTime(long timestamp, String timezone) {
 		String timestring;
 		Date time = new Date(timestamp * 1000);
 		SimpleDateFormat formatter = new SimpleDateFormat("hh:mma");
@@ -149,7 +157,7 @@ public class NAE_Real_Util {
 	}
 	
 	//Method getting the expected time from timestamp in request json
-	public String ExpectedTime(String requestfilepath){
+	public String expectedTime(String requestfilepath){
 		String expectedtime="";
 		String requestbody=getFile(requestfilepath);
 		ObjectMapper mapper =new ObjectMapper();
@@ -157,13 +165,16 @@ public class NAE_Real_Util {
 			NAE_Request_Body newbody=mapper.readValue(requestbody, NAE_Request_Body.class);
 			long timestamp=newbody.getCode().getData().getTimestamp()/1000;
 			String timezone=newbody.getCode().getParams().getTimezone();
-            expectedtime=TransformTime(timestamp,timezone);		
+            expectedtime=transformTime(timestamp,timezone);		
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		}
 		return expectedtime;
 	}
@@ -180,11 +191,14 @@ public class NAE_Real_Util {
 					});
 			IsMapSuccess = true;
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		}
 		return IsMapSuccess;
 	}
@@ -200,11 +214,14 @@ public class NAE_Real_Util {
 					});
 			url=list.get(0).getEndpoint();
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		}
 	    		return url;
 	}
@@ -240,11 +257,14 @@ public class NAE_Real_Util {
 			Payload payload=mapper.readValue(requestpayload, Payload.class);
 			IsMapSuccess=true;
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LOGGER.error(e);
 		}
 		return IsMapSuccess;
 	}
@@ -253,7 +273,8 @@ public class NAE_Real_Util {
 	//@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();
-		System.out.println(util.ExpectedTime("test_data/Valid_JSON.json"));
+		System.out.println(util.expectedTime("test_data/Valid_JSON.json"));
+		//LOGGER.log(p, util.ExpectedTime("test_data/Valid_JSON.json"));
 	}
 
 }

@@ -18,8 +18,8 @@
 		<supermarketsweep.version>[1.0.72,)</supermarketsweep.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<jsonsmart.version>1.2</jsonsmart.version>
-		
-		<zukes.version>[1.0.85,)</zukes.version>
+		<zucchini.version>[1.0.125, 1.1)</zucchini.version>
+		<zukes.version>[1.0.12,)</zukes.version>
 	
 	</properties>
 
@@ -30,7 +30,7 @@
 	<artifactId>jackson-core</artifactId>
 	<version>2.6.1</version>
 </dependency>
-	<!-- <dependency>
+	 <dependency>
                         <groupId>com.comcast.csv.grocery</groupId>
                         <artifactId>results-spice</artifactId>
                         <version>2.0.8</version>
@@ -39,7 +39,7 @@
                         <groupId>com.comcast.csv.grocery</groupId>
                         <artifactId>utils-spice</artifactId>
                         <version>2.0.8</version>
-                </dependency> -->
+                </dependency> 
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
@@ -61,12 +61,12 @@
 	<artifactId>jackson-mapper-asl</artifactId>
 	<version>1.9.13</version>
 </dependency>
-		<!-- <dependency>
+		 <dependency>
 			<groupId>com.comcast.csv.zucchini</groupId>
 			<artifactId>zucchini</artifactId>
 			<version>${zukes.version}</version>
-		</dependency> -->
-		<!-- <dependency>
+		</dependency>
+	    <dependency>
 			<groupId>com.comcast.csv.grocery</groupId>
 			<artifactId>grocery-store</artifactId>
 			<version>${grocery.version}</version>
@@ -82,7 +82,7 @@
 			<version>1.0.3</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
@@ -92,7 +92,7 @@
 			<artifactId>log4j-over-slf4j</artifactId>
 			<scope>test</scope>
 			<version>${slf4j.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<artifactId>supermarket-sweep</artifactId>
 			<groupId>com.comcast.csv.apiconnector</groupId>
@@ -102,12 +102,12 @@
  		<groupId>net.minidev</groupId> 
  		<artifactId>json-smart</artifactId> 
 		 <version>${jsonsmart.version}</version> 
-		</dependency>  -->
+		</dependency>
 		<dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>6.8.8</version>
-      <scope>compile</scope>
+      
     </dependency>
     <dependency>
      <groupId>org.mock-server</groupId>
@@ -169,6 +169,17 @@
         </exclusion>
      </exclusions>
 </dependency>
+<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<!-- <scope>test</scope> -->
+			<version>${slf4j.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -178,11 +189,11 @@
 				<artifactId>gson</artifactId>
 				<version>2.2.4</version>
 			</dependency>
-			<!-- <dependency>
+			<dependency>
 				<groupId>com.comcast.csv.grocery</groupId>
 				<artifactId>spice-rack</artifactId>
 				<version>${spice.version}</version>
-			</dependency> -->
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
