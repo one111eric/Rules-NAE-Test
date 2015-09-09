@@ -26,6 +26,11 @@
 	
 	<dependencies>
 	<dependency>
+  <groupId>com.comcast.csv.reporters</groupId>
+  <artifactId>mongo-reporter</artifactId>
+  <version>[3.0.1,)</version>
+</dependency>
+	<dependency>
 	<groupId>com.fasterxml.jackson.core</groupId>
 	<artifactId>jackson-core</artifactId>
 	<version>2.6.1</version>
@@ -215,6 +220,16 @@
 							<!-- <TestServerEnvironment>STAGE</TestServerEnvironment> -->
 							<log4j.configuration>file:${basedir}/src/main/resources/log4j.conf</log4j.configuration>
 						</systemPropertyVariables>
+						 <systemProperties>
+                        <version.string>${buildNumber}</version.string>
+                        <project.name>(${project.organization.name}) ${project.artifactId}</project.name>
+                        <mongo.host>devmongo01.csv.comcast.com</mongo.host>
+                        <mongo.port>27017</mongo.port>
+                        <mongo.database>zucchini_results</mongo.database>
+                        <mongo.collection>test_results</mongo.collection>
+                        <mongo.username>zucchhinirwuser</mongo.username>
+                        <mongo.password>IatunQuac</mongo.password>
+                    </systemProperties>
 					</configuration>
 					<executions>
                     <execution>
@@ -228,6 +243,19 @@
                     </execution>
                 </executions>
 				</plugin>
+				<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 				<plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

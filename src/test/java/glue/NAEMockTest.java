@@ -86,7 +86,7 @@ public class NAEMockTest {
 		Assert.assertTrue(message
 				.equals("Alarm triggered at Wed Aug 19 13:27:11 PDT 2015"));
 	}
-	@Test
+	//@Test
 	public void realtest(){
 		//String responsebody=realutil.getNAERealResponse("src/test/resources/test_data/Invalid_JSON.json","POST").body().asString();
 		//System.out.print(responsebody);
