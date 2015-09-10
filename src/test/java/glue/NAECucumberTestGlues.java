@@ -226,6 +226,7 @@ public class NAECucumberTestGlues {
 		for(int i=0;i<100;i++){
 			util.sendEventToEEL(EELEVENT_JSON);
 			delay(500);
+			LOGGER.debug(i);
 		}
 		this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
 	}
