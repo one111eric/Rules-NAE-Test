@@ -305,14 +305,25 @@ public class NAE_Real_Util {
 		return isMapSuccess;
 	}
 	
+	/** Method posting an event into EEL 
+     * @param String: event json path
+	 */
 	public void sendEventToEEL(String eventJson){
 		Response response = null;
-	    response = given().log().all()
+	    response = given().log().all().header("X-Debug", true)
 					.body(getFile(eventJson))
 					.post("http://eel.qa.rules.vacsv.com/elementsevent");
 			//response.prettyPrint();
 	}
-	
+	/**Method mapping request into NAE request object, return false if fail
+	 * @param String: request json payload
+	 * @return boolean: True of False to determine if successful
+	 */
+	public String modifyEventJson(String eventJson){
+		String modifiedEvent=getFile(eventJson);
+	    
+		return modifiedEvent;
+	}
 	
 	//a simple unit test for time transform method
 	//@Test
