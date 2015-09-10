@@ -1,5 +1,6 @@
 package glue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.testng.Assert;
@@ -44,7 +45,7 @@ public class NAECucumberTestGlues {
 	private String publishUrl = "";
 	private int beforeRequest;
 	private int afterRequest;
-	private List<Response> responseList;
+	private List<Response> responseList=new ArrayList<Response>();
 
 	/**
      * Test: posting invalid JSON request body
