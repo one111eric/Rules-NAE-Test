@@ -308,12 +308,13 @@ public class NAE_Real_Util {
 	/** Method posting an event into EEL 
      * @param String: event json path
 	 */
-	public void sendEventToEEL(String eventJson){
+	public Response sendEventToEEL(String eventJson){
 		Response response = null;
 	    response = given().log().all().header("X-Debug", true)
 					.body(getFile(eventJson))
 					.post("http://eel.qa.rules.vacsv.com/elementsevent");
 			//response.prettyPrint();
+	    return response;
 	}
 	/**Method mapping request into NAE request object, return false if fail
 	 * @param String: request json payload

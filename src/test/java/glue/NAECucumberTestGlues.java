@@ -1,5 +1,7 @@
 package glue;
 
+import java.util.List;
+
 import org.testng.Assert;
 
 import com.jayway.restassured.path.json.JsonPath;
@@ -10,6 +12,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import impl.NAE_Real_Util;
 import impl.NAE_Properties;
+
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
@@ -41,6 +44,7 @@ public class NAECucumberTestGlues {
 	private String publishUrl = "";
 	private int beforeRequest;
 	private int afterRequest;
+	private List<Response> responseList;
 
 	/**
      * Test: posting invalid JSON request body
@@ -224,7 +228,7 @@ public class NAECucumberTestGlues {
 	@When("^I check the number of notification request")
 	public void checkRequestNumber() {
 		for(int i=0;i<100;i++){
-			util.sendEventToEEL(EELEVENT_JSON);
+			responseList.add(util.sendEventToEEL(EELEVENT_JSON));
 			delay(500);
 			LOGGER.debug(i);
 		}
@@ -234,6 +238,9 @@ public class NAECucumberTestGlues {
 	@Then("^I should get the number")
 	public void getRequestNumber() {
 		delay(30000);
+		for(Response res : responseList){
+			res.prettyPrint();
+		}
 		int requestnumber = util.countRequests(publishUrl);
 		Assert.assertTrue(requestnumber >= 0);
 		LOGGER.debug("Number of Notification sent to Mock Server: "
