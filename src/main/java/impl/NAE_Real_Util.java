@@ -18,12 +18,14 @@ import model.NAE_Request_Body;
 import model.NAE_Response_Body;
 import model.Payload;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.type.TypeReference;
 import org.testng.annotations.Test;
-
 
 import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -307,6 +309,7 @@ public class NAE_Real_Util {
 	
 	/** Method posting an event into EEL 
      * @param String: event json path
+     * @return Response: http response
 	 */
 	public Response sendEventToEEL(String eventJson){
 		Response response = null;
@@ -316,14 +319,54 @@ public class NAE_Real_Util {
 			//response.prettyPrint();
 	    return response;
 	}
+	
+	
+	/** Method posting an event into EEL 
+     * @param String: event json string
+     * @return Response: http response
+	 */
+	public Response sendEventToEELByString(String eventJsonString){
+		Response response = null;
+	    response = given().log().all().header("X-Debug", true)
+					.body(eventJsonString)
+					.post("http://eel.qa.rules.vacsv.com/elementsevent");
+			//response.prettyPrint();
+	    return response;
+	}
+	
 	/**Method mapping request into NAE request object, return false if fail
 	 * @param String: request json payload
+	 * @param int: a modifier to control time
 	 * @return boolean: True of False to determine if successful
 	 */
-	public String modifyEventJson(String eventJson){
+	
+	public String modifyEventJson(String eventJson,int n){
 		String modifiedEvent=getFile(eventJson);
-	    
+	    ObjectMapper mapper=new ObjectMapper();
+	    try {
+			JsonNode rootNode=mapper.readTree(modifiedEvent);
+			JsonNode contentNode=rootNode.path("content");
+			JsonNode timestamp=contentNode.path("timestamp");
+			String timestampString=String.valueOf(timestamp.getLongValue());
+			long newTimestamp=timestamp.getLongValue()+60*1000*n;
+			String newTimestampString=String.valueOf(newTimestamp);
+			modifiedEvent=modifiedEvent.replace(timestampString, newTimestampString);
+			
+			
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return modifiedEvent;
+	}
+	
+	//unit test for event modification
+	//@Test
+	public void eventtest(){
+		modifyEventJson("test_data/EventToEEL.json",1);
 	}
 	
 	//a simple unit test for time transform method

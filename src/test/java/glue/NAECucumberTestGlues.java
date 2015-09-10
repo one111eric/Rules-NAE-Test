@@ -46,6 +46,7 @@ public class NAECucumberTestGlues {
 	private int beforeRequest;
 	private int afterRequest;
 	private List<Response> responseList=new ArrayList<Response>();
+	private List<JsonPath> pathList=new ArrayList<JsonPath>();
 
 	/**
      * Test: posting invalid JSON request body
@@ -229,8 +230,13 @@ public class NAECucumberTestGlues {
 	@When("^I check the number of notification request")
 	public void checkRequestNumber() {
 		for(int i=0;i<100;i++){
-			responseList.add(util.sendEventToEEL(EELEVENT_JSON));
-			delay(500);
+			String eventJson=util.modifyEventJson(EELEVENT_JSON, i);
+			responseList.add(util.sendEventToEELByString(eventJson));
+			
+			//responseList.add(util.sendEventToEEL(EELEVENT_JSON));
+			//pathList.add(new JsonPath(util.sendEventToEEL(EELEVENT_JSON).asString()));
+			
+			delay(2500);
 			LOGGER.debug(i);
 		}
 		this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
@@ -238,10 +244,10 @@ public class NAECucumberTestGlues {
 
 	@Then("^I should get the number")
 	public void getRequestNumber() {
-		delay(30000);
-		for(Response res : responseList){
-			res.prettyPrint();
-		}
+	    delay(30000);
+	    for(Response res : responseList){
+	    	res.prettyPrint();
+	    }
 		int requestnumber = util.countRequests(publishUrl);
 		Assert.assertTrue(requestnumber >= 0);
 		LOGGER.debug("Number of Notification sent to Mock Server: "
