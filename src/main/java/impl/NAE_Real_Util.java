@@ -305,11 +305,22 @@ public class NAE_Real_Util {
 		return isMapSuccess;
 	}
 	
+	public void sendEventToEEL(String eventJson){
+		Response response = null;
+	    response = given().log().all()
+					.body(getFile(eventJson))
+					.post("http://eel.qa.rules.vacsv.com/elementsevent");
+			//response.prettyPrint();
+	}
+	
+	
 	//a simple unit test for time transform method
 	//@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();
 		LOGGER.debug(util.expectedTime("test_data/Valid_JSON.json"));
 	}
+	
+	
 
 }

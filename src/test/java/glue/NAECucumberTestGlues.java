@@ -33,7 +33,7 @@ public class NAECucumberTestGlues {
 	private static final String VALID_JSON = "test_data/Valid_JSON.json";
 	private static final String INVALID_TYPE_JSON = "test_data/Invalid_Type.json";
 	private static final String EMPTY_JSON = "test_data/Empty_JSON.json";
-
+	private static final String EELEVENT_JSON = "test_data/EventToEEL.json";
 	// variable will be used for tests
 	private NAE_Real_Util util = new NAE_Real_Util();
 	private JsonPath path;
@@ -223,11 +223,16 @@ public class NAECucumberTestGlues {
 	
 	@When("^I check the number of notification request")
 	public void checkRequestNumber() {
+		for(int i=0;i<100;i++){
+			util.sendEventToEEL(EELEVENT_JSON);
+			delay(500);
+		}
 		this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
 	}
 
 	@Then("^I should get the number")
 	public void getRequestNumber() {
+		delay(30000);
 		int requestnumber = util.countRequests(publishUrl);
 		Assert.assertTrue(requestnumber >= 0);
 		LOGGER.debug("Number of Notification sent to Mock Server: "
