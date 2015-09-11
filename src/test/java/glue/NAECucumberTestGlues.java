@@ -240,7 +240,7 @@ public class NAECucumberTestGlues {
 			delay(500);
 			LOGGER.debug(i);
 		}
-		this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
+		this.publishUrl = "/publish/xhs/tps/miaolocation10000/notifications/alarm.json";
 	}
 
 	@Then("^I should get the number")
