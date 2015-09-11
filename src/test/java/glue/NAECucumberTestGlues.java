@@ -229,14 +229,15 @@ public class NAECucumberTestGlues {
 	
 	@When("^I check the number of notification request")
 	public void checkRequestNumber() {
-		for(int i=100;i<200;i++){
+		for(int i=0;i<100;i++){
 			String eventJson=util.modifyEventJson(EELEVENT_JSON, i);
 			responseList.add(util.sendEventToEELByString(eventJson));
 			
 			//responseList.add(util.sendEventToEEL(EELEVENT_JSON));
 			//pathList.add(new JsonPath(util.sendEventToEEL(EELEVENT_JSON).asString()));
 			
-			delay(25000);
+			//delay(25000);
+			delay(500);
 			LOGGER.debug(i);
 		}
 		this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
