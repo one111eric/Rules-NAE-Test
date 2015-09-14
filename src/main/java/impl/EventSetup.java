@@ -7,8 +7,8 @@ package impl;
  *
  */
 public class EventSetup {
-	public static final String locationUrl="http://rest-qa.rules.vacsv.com/locations/";
-	public static final String moleculeMappingUrl="http://molecule.qa.rules.vacsv.com/mappings/xh/";
+	public static final String RULES_LOCATION_URL="http://rest-qa.rules.vacsv.com/locations/";
+	public static final String MOLECULE_MAPPING_URL="http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	
 	private String location;
 	private String Site;
