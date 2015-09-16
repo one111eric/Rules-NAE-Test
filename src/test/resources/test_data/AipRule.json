@@ -1,0 +1,31 @@
+{
+  "when": {
+      "pattern": {
+        "name": "AlarmInProgress",
+        "timestamp": "?notiftimestamp"
+      }
+  },
+  "action": {
+    "endpoint": "http://nae.qa.rules.vacsv.com/notify",
+    "code": {
+      "location": "locationName",
+      "tenant": "xh",
+      "type": "ALARM_IN_PROGRESS",
+      "transport": [
+          "emo"
+      ],
+      "params": {
+          "topic": "/xhs/tps/locationName/notifications/alarm",
+          "phone": "15109313328",
+          "email": "one111eric@hotmail.com",
+          "deviceid": "8987917728960595555",
+          "duration": "10000"
+      },
+      "data": {
+      	  "env": "qa",
+          "timestamp": "?notiftimestamp",
+          "zone": ""
+      }
+    }
+  }
+}
