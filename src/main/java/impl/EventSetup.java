@@ -97,9 +97,7 @@ public class EventSetup {
 		System.out.println(myEvent);
 		this.event=myEvent;
 	}
-	
-	
-	
+		
 	public void fireEvent(){
 		Response response=null;
 		response=given().log().all().body(this.event)

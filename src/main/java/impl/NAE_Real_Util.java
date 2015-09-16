@@ -258,9 +258,20 @@ public class NAE_Real_Util {
      */
 	public int countRequests(String url){
 		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+		//RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
 		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
 		List<LoggedRequest> reqs=findAll(builder);
 		return reqs.size();
+	}
+	
+	public void printAllRequest(String url){
+		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+		RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
+		List<LoggedRequest> reqs=findAll(builder);
+		int listSize=reqs.size();
+		for(int i=0;i<listSize;i++){
+			LOGGER.debug(reqs.get(i).getBodyAsString());
+		}
 	}
 	
 	//Get the payload object in the request sent to the mock server
