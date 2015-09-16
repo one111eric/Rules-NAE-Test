@@ -5,6 +5,7 @@
     <classes>
       <class name="glue.NAECucumberTest"/>
       <class name="glue.NAECucumberTestGlues"/>
+      <class name="glue.EndToEndTestGlues"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

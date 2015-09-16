@@ -25,11 +25,7 @@
 
 	
 	<dependencies>
-	<dependency>
-			<groupId>com.comcast.csv.drivethru</groupId>
-			<artifactId>drive-thru</artifactId>
-			<version>1.0.105</version>
-		</dependency>
+	
 	<dependency>
 	<groupId>com.fasterxml.jackson.core</groupId>
 	<artifactId>jackson-core</artifactId>

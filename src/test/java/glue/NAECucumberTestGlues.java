@@ -11,6 +11,7 @@ import com.jayway.restassured.response.Response;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import impl.Commons;
 import impl.NAE_Real_Util;
 import impl.NAE_Properties;
 
@@ -46,8 +47,8 @@ public class NAECucumberTestGlues {
 	private int beforeRequest;
 	private int afterRequest;
 	private List<Response> responseList=new ArrayList<Response>();
-	private List<JsonPath> pathList=new ArrayList<JsonPath>();
-
+	// AIP EEL end point
+	
 	/**
      * Test: posting invalid JSON request body
      */
@@ -108,7 +109,7 @@ public class NAECucumberTestGlues {
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
 				NAE_Properties.WITH_X_DEBUG_HEADER);
 		this.path = new JsonPath(response.asString());
-		delay(30000);
+		Commons.delay(30000);
 	}
 
 	@Then("^I should get a valid response body with correct time$")
@@ -171,7 +172,7 @@ public class NAECucumberTestGlues {
 
 	@Then("^I should see the number of the request log increased by 1$")
 	public void requestsCount() {
-		delay(30000);
+		Commons.delay(30000);
 		String endpoint = util.getEndPoint(response);
 		this.publishUrl = endpoint.replace(NAE_Properties.MOCKSERVER_ADDRESS,
 				"");
@@ -181,7 +182,7 @@ public class NAECucumberTestGlues {
 		LOGGER.debug(beforeRequest);
 		this.response = util.getNAERealResponse(VALID_JSON, "POST",
 				NAE_Properties.WITHOUT_X_DEBUG_HEADER);
-		delay(30000);
+		Commons.delay(30000);
 		afterRequest = util.countRequests(publishUrl);
 		LOGGER.debug(afterRequest);
 		int increased = afterRequest - beforeRequest;
@@ -229,7 +230,7 @@ public class NAECucumberTestGlues {
 	
 	@When("^I check the number of notification request")
 	public void checkRequestNumber() {
-		for(int i=0;i<100;i++){
+		for(int i=0;i<1;i++){
 			String eventJson=util.modifyEventJson(EELEVENT_JSON, i);
 			responseList.add(util.sendEventToEELByString(eventJson));
 			
@@ -237,16 +238,16 @@ public class NAECucumberTestGlues {
 			//pathList.add(new JsonPath(util.sendEventToEEL(EELEVENT_JSON).asString()));
 			
 			//delay(25000);
-			delay(500);
+			Commons.delay(500);
 			LOGGER.debug(i);
 		}
 		this.publishUrl = "/publish/xhs/tps/miaolocation10000/notifications/alarm.json";
 		//this.publishUrl = "/publish/xhs/tps/209052550323032015Comcast.cust/notifications/alarm.json";
 	}
 
-	@Then("^I should get the number")
+	@Then("^I should get the number$")
 	public void getRequestNumber() {
-	    delay(30000);
+	    Commons.delay(30000);
 	    for(Response res : responseList){
 	    	res.prettyPrint();
 	    }
@@ -255,15 +256,5 @@ public class NAECucumberTestGlues {
 		LOGGER.debug("Number of Notification sent to Mock Server: "
 				+ requestnumber);
 	}
-
-	/**
-     * A general method to add a delay in processing thread
-     */
-	public void delay(int n) {
-		try {
-			Thread.sleep(n);
-		} catch (InterruptedException e) {
-			LOGGER.error(e);
-		}
-	}
+	
 }

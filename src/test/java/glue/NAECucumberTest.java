@@ -22,7 +22,7 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
 
 @CucumberOptions(plugin={"pretty","html:target/cucumber","json:target/cucumber.json"},glue={"glue"},features={"src/test/resources/test_features/" },
 
-  tags={"@CheckNumber"})
+  tags={"@EndToEnd-XRULES-347"})
 
 @Test
 public class NAECucumberTest extends AbstractTestNGCucumberTests{
