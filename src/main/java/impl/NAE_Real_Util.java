@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -291,6 +292,29 @@ public class NAE_Real_Util {
 		}
 		return requestPayload;
 	}
+	
+	//Get the payload object in the request sent to the mock server
+		/**
+	     * Method getting the payload object in the request sent tot the mock server
+	     * @param url: requested URL from NAE
+	     * @param int n: number of last requests
+	     * @return String: payload object mapped into a string
+	     */
+		public List<String> getRequestPayloadList(String url,int n){
+			String requestPayload="";
+			List<String> reqsList=new ArrayList<String>();
+			WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+			RequestPatternBuilder builder=new RequestPatternBuilder(RequestMethod.POST,urlMatching(url));
+			List<LoggedRequest> reqs=findAll(builder);
+			int count=reqs.size();
+			if(count>=1&&n>=1){
+				for(int i=n;i>=1;i--){
+				   requestPayload=reqs.get(count-i).getBodyAsString();
+				   reqsList.add(requestPayload);
+				}
+			}
+			return reqsList;
+		}
 	
 	//Method trying to map request into NAE request object,return false if fail
 	//to map

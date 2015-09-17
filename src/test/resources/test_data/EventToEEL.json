@@ -54,7 +54,7 @@
             "site": "siteId"
         },
         "title": "Panel Status: Alarm",
-        "eventid": "123456789"
+        "eventId": "123456789"
     },
     "sequence": 1439476066909,
     "timestamp": 1439476066909,

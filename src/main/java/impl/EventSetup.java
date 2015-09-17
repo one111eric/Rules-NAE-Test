@@ -1,9 +1,14 @@
 package impl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testng.Assert;
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.testng.annotations.Test;
 
 import com.jayway.restassured.response.Response;
 
@@ -28,6 +33,8 @@ public class EventSetup {
 	private String site;
 	private String event;
 	private Map<String,String> headers=new HashMap<String,String>();
+	
+	private static final Logger LOGGER=Logger.getLogger(EventSetup.class);
 
 	public void eventSetup() throws Throwable {
 		headers.put("Xrs-Tenant-Id", "xh");
@@ -104,6 +111,42 @@ public class EventSetup {
 				.expect().statusCode(200)
 				.post(AIP_EEL_ENDPOINT);
 		response.prettyPrint();
+	}
+	
+	public void createUniqueEvent(String eventJson,int n){
+		String uniqueEvent=this.event;
+		ObjectMapper mapper=new ObjectMapper();
+	    try {
+			JsonNode rootNode=mapper.readTree(uniqueEvent);
+			JsonNode contentNode=rootNode.path("content");
+			
+			JsonNode timestamp=contentNode.path("timestamp");
+			String timestampString=String.valueOf(timestamp.getLongValue());
+			
+			JsonNode eventId=contentNode.path("eventId");
+			String eventIdString=eventId.getTextValue();
+			
+			long currentTimestamp=System.currentTimeMillis();
+			long newTimestamp=currentTimestamp+60*1000*n;
+			String newTimestampString=String.valueOf(newTimestamp);
+			String newEventIdString=newTimestampString;
+			uniqueEvent=uniqueEvent.replace(timestampString, newTimestampString).
+					replace(eventIdString, newEventIdString);
+		    LOGGER.debug(newEventIdString);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.event=uniqueEvent;
+	}
+	
+	@Test
+	public void printTime(){
+		long currentTimestamp=System.currentTimeMillis();
+		System.out.println(currentTimestamp);
 	}
 	
 }
