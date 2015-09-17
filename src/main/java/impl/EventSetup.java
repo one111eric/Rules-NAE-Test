@@ -44,6 +44,14 @@ public class EventSetup {
 		setupEvent();
 	}
 	
+	public void eventSetup(String eventJson) throws Throwable {
+		headers.put("Xrs-Tenant-Id", "xh");
+		setupLocation();
+		setupSite();
+		setupRule();
+		setupEvent(eventJson);
+	}
+	
 	//getters
 	public String getLocation() {
 		return location;
@@ -99,9 +107,13 @@ public class EventSetup {
 	
 	public void setupEvent(){
 		String myEvent=util.getFile(EVENT_JSON);
-		System.out.println(myEvent);
 		myEvent=myEvent.replace("siteId", getSite());
-		System.out.println(myEvent);
+		this.event=myEvent;
+	}
+	
+	public void setupEvent(String eventJson){
+		String myEvent=util.getFile(eventJson);
+		myEvent=myEvent.replace("siteId", getSite());
 		this.event=myEvent;
 	}
 		

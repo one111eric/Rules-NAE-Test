@@ -25,6 +25,7 @@ public class EndToEndTestGlues {
 	private String publishUrl = "";
 	private NAE_Real_Util util = new NAE_Real_Util();
 	private int notifReceived;
+	private static final String INVALID_EVENT = "test_data/Invalid_Event.json";
 
 	/**
 	 * Test: post an AIP event to EEL
@@ -45,14 +46,20 @@ public class EndToEndTestGlues {
 				+ location + " : " + requestNumber);
 	}
 
-	@And("^I post an Event of that location to EEL$")
-	public void postEventToEEL() throws Throwable {
-		EventSetup newEvent = new EventSetup();
-		newEvent.eventSetup();
-		
-		newEvent.createUniqueEvent(newEvent.getEvent(), 1);
-		newEvent.fireEvent();
-		
+	@And("^I post an \"([^\"]*)\" Event of that location to EEL$")
+	public void postEventToEEL(String type) throws Throwable {
+		Assert.assertTrue(type.equals("valid") || type.equals("invalid"));
+		if (type.equals("valid")) {
+			EventSetup newEvent = new EventSetup();
+			newEvent.eventSetup();
+			newEvent.createUniqueEvent(newEvent.getEvent(), 1);
+			newEvent.fireEvent();
+		} else if (type.equals("invalid")) {
+			EventSetup newEvent = new EventSetup();
+			newEvent.eventSetup(INVALID_EVENT);
+			newEvent.fireEvent();
+		}
+
 	}
 
 	@Then("^I should see the number of the request to that location increased by (\\d+)$")
@@ -71,10 +78,8 @@ public class EndToEndTestGlues {
 		for (int i = 0; i < notifReceived; i++) {
 			LOGGER.debug(lastRequestBodyList.get(i));
 		}
-		//Assert.assertEquals(increased,y);
-		Assert.assertTrue(increased>=y&&increased <=y*2);
-		
-		
+		Assert.assertEquals(increased, y);
+		// Assert.assertTrue(increased>=y&&increased <=y*2);
 
 	}
 
@@ -84,18 +89,17 @@ public class EndToEndTestGlues {
 				publishUrl, notifReceived);
 		for (int i = 0; i < notifReceived; i++) {
 			Assert.assertTrue(util.mapRequest(lastRequestBodyList.get(i)));
-			//LOGGER.debug(lastRequestBodyList.get(i));
+			// LOGGER.debug(lastRequestBodyList.get(i));
 		}
 	}
 
 	@And("^the timestamp is correct$")
 	public void checkTimestamp() {
-
+        
 	}
 
 	@When("^I post (\\d+) number of \"([^\"]*)\" events with (\\d+) secs of delay to EEL$")
-	public void postMutipleEvents(int n, String type, int x)
-			throws Throwable {
+	public void postMutipleEvents(int n, String type, int x) throws Throwable {
 		if (type.equals("identical")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
