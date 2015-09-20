@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.ProvisionsBody;
+
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.Test;
 
@@ -38,16 +42,18 @@ public class EventSetup {
 
 	public void eventSetup() throws Throwable {
 		headers.put("Xrs-Tenant-Id", "xh");
-		setupLocation();
-		setupSite();
+		//setupLocation();
+		//setupSite();
+		setupProvisions();
 		setupRule();
 		setupEvent();
 	}
 	
 	public void eventSetup(String eventJson) throws Throwable {
 		headers.put("Xrs-Tenant-Id", "xh");
-		setupLocation();
-		setupSite();
+//		setupLocation();
+//		setupSite();
+		setupProvisions();
 		setupRule();
 		setupEvent(eventJson);
 	}
@@ -65,6 +71,26 @@ public class EventSetup {
 		return event;
 	}
 	
+	public void setupProvisions() throws Throwable{
+		String locationName="MiaoLocation00001";
+		String siteId="850520";
+		String locationEndPoint=RULES_LOCATION_URL+locationName;         
+        Response response=null;
+        //delete the existing location
+        response=given().log().all().headers(this.headers)
+        		 .expect().statusCode(200)
+        		 .delete(locationEndPoint);
+        //Setup provisions, including location and siteId
+		String provisionEndPoint=NAE_Properties.PROVISION_ENDPOINT;
+		String provisionsBody=provisionsBodyToString(locationName,siteId);
+		response=given().log().all().headers(this.headers).body(provisionsBody)
+				.expect().statusCode(200)
+				.post(provisionEndPoint);
+		response.prettyPrint();
+		this.location=locationName;
+		this.site=siteId;
+		
+	}
 	public void setupLocation() throws Throwable {
         String locationName="MiaoLocation00001";
         String locationEndPoint=RULES_LOCATION_URL+locationName;         
@@ -146,15 +172,28 @@ public class EventSetup {
 					replace(eventIdString, newEventIdString);
 		    LOGGER.debug(newEventIdString);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 		this.event=uniqueEvent;
 	}
 	
+	private String provisionsBodyToString(String location, String siteId){
+		String provisionsBody="";
+		ProvisionsBody newProvisionsBody=new ProvisionsBody(location,siteId);
+		ObjectMapper mapper=new ObjectMapper();
+		try {
+			provisionsBody=mapper.writeValueAsString(newProvisionsBody);
+		} catch (JsonGenerationException e) {
+			LOGGER.error(e);
+		} catch (JsonMappingException e) {
+			LOGGER.error(e);
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}	
+		return provisionsBody;
+	}
 	@Test
 	public void printTime(){
 		long currentTimestamp=System.currentTimeMillis();

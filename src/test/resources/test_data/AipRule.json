@@ -2,28 +2,25 @@
   "when": {
       "pattern": {
         "name": "AlarmInProgress",
-        "timestamp": "?notiftimestamp"
+        "timestamp": "?time"
       }
   },
   "action": {
-    "endpoint": "http://nae.qa.rules.vacsv.com/notify",
+    "endpoint": "http://nae.qa.rules.comcast.com/notify",
     "code": {
-      "location": "locationName",
+      "location": "?location",
       "tenant": "xh",
       "type": "ALARM_IN_PROGRESS",
       "transport": [
           "emo"
       ],
       "params": {
-          "topic": "/xhs/tps/locationName/notifications/alarm",
-          "phone": "15109313328",
-          "email": "one111eric@hotmail.com",
           "deviceid": "8987917728960595555",
           "duration": "10000"
       },
       "data": {
       	  "env": "qa",
-          "timestamp": "?notiftimestamp",
+          "timestamp": "?time",
           "zone": ""
       }
     }
