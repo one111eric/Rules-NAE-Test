@@ -350,7 +350,7 @@ public class NAE_Real_Util {
 		Response response = null;
 	    response = given().log().all().header("X-Debug", true)
 					.body(getFile(eventJson))
-					.post("http://eel.qa.rules.vacsv.com/elementsevent");
+					.post(NAE_Properties.EEL_EVENT_ENDPOINT);
 			//response.prettyPrint();
 	    return response;
 	}
@@ -364,7 +364,7 @@ public class NAE_Real_Util {
 		Response response = null;
 	    response = given().log().all().header("X-Debug", true)
 					.body(eventJsonString)
-					.post("http://eel.qa.rules.vacsv.com/elementsevent");
+					.post(NAE_Properties.EEL_EVENT_ENDPOINT);
 			//response.prettyPrint();
 	    return response;
 	}

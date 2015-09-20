@@ -29,7 +29,7 @@ public class EventSetup {
 	public static final String MOLECULE_MAPPING_URL="http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON="test_data/AipRule.json";
 	public static final String EVENT_JSON="test_data/EventToEEL.json";
-	private static final String AIP_EEL_ENDPOINT="http://eel.qa.rules.vacsv.com/elementsevent";
+	//private static final String AIP_EEL_ENDPOINT="http://eel.qa.rules.vacsv.com/elementsevent";
 	                                      
 	private NAE_Real_Util util=new NAE_Real_Util();
 	
@@ -147,7 +147,7 @@ public class EventSetup {
 		Response response=null;
 		response=given().log().all().body(this.event)
 				.expect().statusCode(200)
-				.post(AIP_EEL_ENDPOINT);
+				.post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
 	}
 	
