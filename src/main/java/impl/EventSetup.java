@@ -25,7 +25,7 @@ import static com.jayway.restassured.RestAssured.given;
  *
  */
 public class EventSetup {
-	public static final String RULES_LOCATION_URL="http://rest-qa.rules.vacsv.com/locations/";
+	public static final String RULES_LOCATION_URL="http://rest.qa.rules.comcast.com/locations/";
 	public static final String MOLECULE_MAPPING_URL="http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON="test_data/AipRule.json";
 	public static final String EVENT_JSON="test_data/EventToEEL.json";

@@ -22,7 +22,7 @@ Scenario Outline: Send n number of identical/unique events with x secs delay and
   And the request body is in correct json format
   Examples: 
   |location|n|type|x|y|
-  |MiaoLocation00001|10|identical|1|3|
+  |MiaoLocation00001|10|identical|1|6|
   |MiaoLocation00001|10|unique|1|10|
   
   

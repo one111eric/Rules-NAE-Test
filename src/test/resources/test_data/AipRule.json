@@ -6,9 +6,9 @@
       }
   },
   "action": {
-    "endpoint": "http://nae.qa.rules.comcast.com/notify",
+    "endpoint": "http://nae.qa.rules.vacsv.com/notify",
     "code": {
-      "location": "?location",
+      "location": "locationName",
       "tenant": "xh",
       "type": "ALARM_IN_PROGRESS",
       "transport": [
