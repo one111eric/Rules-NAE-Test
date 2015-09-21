@@ -4,18 +4,21 @@ import java.util.List;
 
 import impl.Commons;
 import impl.EventSetup;
-import impl.NAE_Properties;
 import impl.NAE_Real_Util;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
-import com.comcast.csv.drivethru.api.HTTPRequestManager.METHOD;
-
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+/**
+ * Class for AIP end to end test glues
+ *
+ * @author Miao Xiang
+ *
+ */
 public class EndToEndTestGlues {
 	private static final Logger LOGGER = Logger
 			.getLogger(EndToEndTestGlues.class);
@@ -98,6 +101,9 @@ public class EndToEndTestGlues {
         
 	}
 
+	/**
+	 * Test: post multiple identical/unique AIP event to EEL
+	 */
 	@When("^I post (\\d+) number of \"([^\"]*)\" events with (\\d+) secs of delay to EEL$")
 	public void postMutipleEvents(int n, String type, int x) throws Throwable {
 		if (type.equals("identical")) {
