@@ -1,17 +1,34 @@
 Feature: Test Multi-Tenancy support for AIP end to end 
-	Scenario:
-	When I create a new tenant with the same AIP topic handler
-	And I post an same AIP event to EEL from this tenant's site
-	Then I should receive two notification messages on mock server.
+	Scenario Outline:
+	Given I have a new tenant "<tenant>" with the same AIP topic handler
+	And I create "<location>" and "<site>" for "<tenant>"
+	And I create "<location>" and "<site>" for xh tenant
+	And I post an AIP event from this "<site>" to EEL
+	Then I should receive <number> notification messages on mock server
+	Examples:
+	|tenant|location|site|number|
+	|Tenant3|MiaoLocation5|850527|2|
 	
-	Scenario:
-	When I create a new tenant with a modified AIP topic handler
-	And I post an modified event to EEL to this tenant's site
-	Then I should receive one notification message on mock serve
+	Scenario Outline:
+	Given I have a new tenant "<tenant>" with a modified AIP topic handler
+	And I create "<location>" and "<site>" for "<tenant>"
+	And I create "<location>" and "<site>" for xh tenant
+	And I post an modified AIP event from this "<site>" to EEL 
+	Then I should receive <number> notification messages on mock server
+	Examples:
+	|tenant|location|site|number|
+	|Tenant3|MiaoLocation5|850527|1|
 	
-	Scenario:
-	When I created a new tenant with the same AIP topic handler
-	And I post an invalid event JSON to EEL from this tenant's site
-	Then I should receive zero notification message on mock server
+	Scenario Outline:
+	Given I have a new tenant "<tenant>" with the same AIP topic handler
+	And I create "<location>" and "<site>" for "<tenant>"
+	And I post an invalid event JSON from this tenant's site to EEL 
+	Then I should receive <number> notification message on mock server
+	Examples:
+	|tenant|location|site|number|
+	|Tenant3|MiaoLocation5|850527|0|
+	
+	
+
 
 
