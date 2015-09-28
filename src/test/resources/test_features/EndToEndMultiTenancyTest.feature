@@ -1,3 +1,4 @@
+@EndToEndMT-XRULES-1168
 Feature: Test Multi-Tenancy support for AIP end to end 
 	Scenario Outline:
 	Given I have a new tenant "<tenant>" with the same AIP topic handler
