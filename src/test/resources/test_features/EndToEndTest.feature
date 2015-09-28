@@ -8,6 +8,7 @@ Scenario Outline: send a single event to a location and verify it goes through
   And I post an "<type>" Event of that location to EEL
   Then I should see the number of the request to that location increased by <y>
   And the request body is in correct json format
+  And the messages are in correct format
   And the timestamp is correct
   Examples:
   |location|type|y|
