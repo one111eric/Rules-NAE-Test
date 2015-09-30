@@ -61,6 +61,12 @@ public class EventSetup {
 		setupRule();
 		setupEvent(eventJson);
 	}
+	
+	public void eventSetup(String locationName,String siteId,String tenantName) throws Throwable{
+		setupProvisions(locationName,siteId,tenantName);
+		setupRule(locationName,tenantName);
+		setupEvent();
+	}
 
 	// getters
 	public String getLocation() {
@@ -97,6 +103,27 @@ public class EventSetup {
 		this.site = siteId;
 
 	}
+	/**
+	 * Method setting up location/site based on their names and tenant name
+	 * @param locationName
+	 * @param siteId
+	 * @param tenantName
+	 */
+	public void setupProvisions(String locationName,String siteId,String tenantName){
+		Response response = null;
+		// Setup provisions, with location name and siteId
+		String provisionEndPoint = NAE_Properties.PROVISION_ENDPOINT+"/";
+	    Map<String, String> headers = new HashMap<String, String>();
+	    headers.put("Xrs-Tenant-Id", tenantName);
+		String provisionsBody = provisionsBodyToString(locationName, siteId);
+		response = given().log().all().headers(headers)
+				.body(provisionsBody).expect().statusCode(ServerStatusCodes.OK)
+				.post(provisionEndPoint);
+		response.prettyPrint();
+		this.location = locationName;
+		this.site = siteId;
+		
+	}
 
 	/**
 	 * Out-dated method that gets quoted out.
@@ -129,6 +156,35 @@ public class EventSetup {
 				+ ruleNumber;
 		Response response = null;
 		response = given().log().all().headers(this.headers).body(myRule)
+				.expect().statusCode(200).put(ruleEndPoint);
+		response.prettyPrint();
+	}
+	
+	public void setupRule(String locationName) throws Throwable {
+		String ruleNumber = "1234";
+		String myRule = util.getFile(RULE_JSON);
+		System.out.println(myRule);
+		myRule = myRule.replace("locationName", location);
+		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
+				+ ruleNumber;
+		Response response = null;
+		response = given().log().all().headers(this.headers).body(myRule)
+				.expect().statusCode(200).put(ruleEndPoint);
+		response.prettyPrint();
+	}
+	
+	public void setupRule(String locationName,String tenantName) throws Throwable {
+		String ruleNumber = "1234";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Xrs-Tenant-Id", tenantName);
+		
+		String myRule = util.getFile(RULE_JSON);
+		System.out.println(myRule);
+		myRule = myRule.replace("locationName", location);
+		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
+				+ ruleNumber;
+		Response response = null;
+		response = given().log().all().headers(headers).body(myRule)
 				.expect().statusCode(200).put(ruleEndPoint);
 		response.prettyPrint();
 	}
@@ -201,6 +257,9 @@ public class EventSetup {
 		this.event = uniqueEvent;
 	}
 
+	
+	
+	
 	/**
 	 * Method that transform an provision body object to JSON String
 	 * 
@@ -225,6 +284,8 @@ public class EventSetup {
 		}
 		return provisionsBody;
 	}
+	
+	
 
 	// simple unit test to print current timestamp
 	// @Test

@@ -15,5 +15,5 @@ public class NAE_Properties {
 	public static final String REST_ENDPOINT = "http://rest.qa.rules.comcast.com/";
 	public static final String PROVISION_ENDPOINT = "http://rest.qa.rules.comcast.com/provisions";
 	public static final String EEL_EVENT_ENDPOINT = "http://eel.qa.rules.comcast.com/elementsevent";
-
+    public static final String EEL_HEALTH_ENDPOINT= "http://eel.qa.rules.comcast.com/health";
 }

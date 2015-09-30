@@ -96,6 +96,22 @@ public class EndToEndTestGlues {
 		}
 	}
 
+	@And("^the messages are in correct format$")
+	public void checkMessageText(){
+		List<String> lastRequestBodyList = util.getRequestPayloadList(
+				publishUrl, notifReceived);
+		for(int i=0;i<notifReceived;i++){
+			String apnMessage=util.mapPayload(lastRequestBodyList.get(i)).getApns().getAlert();
+			
+			String gcmMessage=util.mapPayload(lastRequestBodyList.get(i)).getGcm().getOtherdata().getMessage();
+			
+			Assert.assertTrue(apnMessage.startsWith("An alarm was triggered at "));
+			Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
+			Assert.assertTrue(gcmMessage.startsWith("Since "));
+			Assert.assertTrue(apnMessage.endsWith("Touch to view details."));
+		}
+		
+	}
 	@And("^the timestamp is correct$")
 	public void checkTimestamp() {
         
@@ -123,5 +139,7 @@ public class EndToEndTestGlues {
 			}
 		}
 	}
+	
+	
 
 }

@@ -11,14 +11,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TimeZone;
 
 import model.NAE_Request_Body;
 import model.NAE_Response_Body;
 import model.Payload;
+import model.ProvisionsBody;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
@@ -32,6 +36,7 @@ import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
 import org.apache.log4j.Logger;
@@ -358,18 +363,39 @@ public class NAE_Real_Util {
 			Payload payload = mapper.readValue(requestPayload, Payload.class);
 			isMapSuccess = true;
 		} catch (JsonParseException e) {
-			// e.printStackTrace();
 			LOGGER.error(e);
 		} catch (JsonMappingException e) {
-			// e.printStackTrace();
 			LOGGER.error(e);
 		} catch (IOException e) {
-			// e.printStackTrace();
 			LOGGER.error(e);
 		}
 		return isMapSuccess;
 	}
-
+	
+	// Method that maps request payload into NAE request payload object
+		// to map
+		/**
+		 * Method mapping request into NAE request object, return false if fail
+		 * 
+		 * @param String
+		 *            : request json payload
+		 * @return Payload: Payload Object in NAE response
+		 */
+		public Payload mapPayload(String requestPayload) {
+			Payload payload=new Payload();
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				payload = mapper.readValue(requestPayload, Payload.class);
+			} catch (JsonParseException e) {
+				LOGGER.error(e);
+			} catch (JsonMappingException e) {
+				LOGGER.error(e);
+			} catch (IOException e) {
+				LOGGER.error(e);
+			}
+			return payload;
+		}
+	
 	/**
 	 * Method posting an event into EEL
 	 * 
@@ -402,7 +428,7 @@ public class NAE_Real_Util {
 	}
 
 	/**
-	 * Method mapping request into NAE request object, return false if fail
+	 * Method modify request by changing timestamps
 	 * 
 	 * @param String
 	 *            : request json payload
@@ -430,7 +456,50 @@ public class NAE_Real_Util {
 		}
 		return modifiedEvent;
 	}
-
+	
+	/**
+	 * Method verify if a tenant exist in eel
+	 * 
+	 * @param String
+	 *            : tenant name
+	 * @return boolean: True of False to determine if tenant exist
+	 */
+	public boolean verifyTenantExist(String tenant){
+		boolean ifExist=false;
+		Response response = null;
+		response = given().log().all()
+				.get(NAE_Properties.EEL_HEALTH_ENDPOINT);
+		JsonPath path=new JsonPath(response.asString());
+		String tenantPath="TopicHandlers.TopicHandlers."+tenant;
+		try{
+		    Map<String,Object> tenantContent=path.getMap(tenantPath);
+		    ifExist=true;
+		}
+		catch(Exception e){
+			LOGGER.error(e);
+		}
+		return ifExist;
+	}
+    
+	public boolean verifyTopicHandlerExist(String tenant, String topicHandler){
+		boolean ifExist=false;
+		Response response = null;
+		response = given().log().all()
+				.get(NAE_Properties.EEL_HEALTH_ENDPOINT);
+		JsonPath path=new JsonPath(response.asString());
+		try{
+		    Map<String,Object> tenantContent=path.getMap("TopicHandlers.TopicHandlers.Tenant3");
+		    if(tenantContent.containsKey(topicHandler)){
+		    	ifExist=true;
+		    }
+		}
+		catch(Exception e){
+			LOGGER.error(e);
+		}
+		return ifExist;
+	}
+	
+	
 	// unit test for event modification
 	// @Test
 	public void eventtest() {
@@ -443,5 +512,11 @@ public class NAE_Real_Util {
 		NAE_Real_Util util = new NAE_Real_Util();
 		LOGGER.debug(util.expectedTime("test_data/Valid_JSON.json"));
 	}
-
+   
+	// a unit test for verify tenant exist method
+	@Test
+	public void tenantexisttest(){
+	NAE_Real_Util util = new NAE_Real_Util();
+	util.verifyTenantExist("Tenant3");
+	}
 }
