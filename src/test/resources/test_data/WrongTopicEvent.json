@@ -1,0 +1,62 @@
+{
+    "topic": "/miao/tps/siteId/panel/panelStatus/AlarmInProgress",
+    "content": {
+        "_links": {
+            "self": {
+                "href": "tag:xh-tps,2015:event:1706675355-4"
+            },
+            "device": {
+                "href": "tag:xh-tps,2015:device:109c972683e05a.0"
+            },
+            "account": {
+                "href": "tag:xh-tps,2015:site:siteId"
+            },
+            "adapter": {
+                "href": "tag:xh-tps,2015:xh-notifications"
+            }
+        },
+        "_embedded": {
+            "states": [
+                {
+                    "_links": {
+                        "self": {
+                            "href": "tag:xh-tps,2015:device:109c972683e05a.0/panel/panelStatus"
+                        }
+                    },
+                    "_type": "tag:xh-tps,2015:panel/panelStatus",
+                    "value": "alarm"
+                },
+                {
+                    "_links": {
+                        "self": {
+                            "href": "tag:xh-tps,2015:device:109c972683e05a.0/system/troubled"
+                        }
+                    },
+                    "_type": "tag:xh-tps,2015:system/troubled",
+                    "value": "false"
+                },
+                {
+                    "_links": {
+                        "self": {
+                            "href": "tag:xh-tps,2015:device:109c972683e05a.0/panel/armState"
+                        }
+                    },
+                    "_type": "tag:xh-tps,2015:panel/armState",
+                    "value": "notArmed"
+                }
+            ]
+        },
+        "_type": "http://ourwiki.comcast.com/IoT/event/state/change",
+        "name": "AlarmInProgress",
+        "timestamp": 1439476057719,
+        "metadata": {
+            "environment": "qa",
+            "site": "siteId"
+        },
+        "title": "Panel Status: Alarm",
+        "eventId": "123456789"
+    },
+    "sequence": 1439476066909,
+    "timestamp": 1439476066909,
+    "expires": 0
+}

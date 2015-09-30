@@ -28,6 +28,7 @@ public class EventSetup {
 	public static final String RULES_LOCATION_URL = "http://rest.qa.rules.comcast.com/locations/";
 	public static final String MOLECULE_MAPPING_URL = "http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON = "test_data/AipRule.json";
+	public static final String INVALID_RULE_JSON="test_data/Invalid_Rule.json";
 	public static final String EVENT_JSON = "test_data/EventToEEL.json";
 
 	private NAE_Real_Util util = new NAE_Real_Util();
@@ -62,9 +63,9 @@ public class EventSetup {
 		setupEvent(eventJson);
 	}
 	
-	public void eventSetup(String locationName,String siteId,String tenantName) throws Throwable{
+	public void eventSetup(String locationName,String siteId,String tenantName, boolean isRuleValid) throws Throwable{
 		setupProvisions(locationName,siteId,tenantName);
-		setupRule(locationName,tenantName);
+		setupRule(locationName,tenantName,isRuleValid);
 		setupEvent();
 	}
 
@@ -150,7 +151,7 @@ public class EventSetup {
 	public void setupRule() throws Throwable {
 		String ruleNumber = "1234";
 		String myRule = util.getFile(RULE_JSON);
-		System.out.println(myRule);
+		
 		myRule = myRule.replace("locationName", location);
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
@@ -163,7 +164,7 @@ public class EventSetup {
 	public void setupRule(String locationName) throws Throwable {
 		String ruleNumber = "1234";
 		String myRule = util.getFile(RULE_JSON);
-		System.out.println(myRule);
+		
 		myRule = myRule.replace("locationName", location);
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
@@ -173,20 +174,25 @@ public class EventSetup {
 		response.prettyPrint();
 	}
 	
-	public void setupRule(String locationName,String tenantName) throws Throwable {
+	public void setupRule(String locationName,String tenantName,boolean isRuleValid) throws Throwable {
 		String ruleNumber = "1234";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Xrs-Tenant-Id", tenantName);
-		
-		String myRule = util.getFile(RULE_JSON);
-		System.out.println(myRule);
-		myRule = myRule.replace("locationName", location);
+		String myRule="";
+		if(isRuleValid){
+		myRule = util.getFile(RULE_JSON);
+		}
+		else {
+			myRule=util.getFile(INVALID_RULE_JSON);
+		}
+		myRule = myRule.replace("locationName", location).replace("xh",tenantName);
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
 		Response response = null;
 		response = given().log().all().headers(headers).body(myRule)
 				.expect().statusCode(200).put(ruleEndPoint);
 		response.prettyPrint();
+		
 	}
 
 	/**
