@@ -129,7 +129,7 @@ public class EndToEndMTTestGlues {
 	
 	@And("^I post an modified AIP event from this \"([^\"]*)\" to EEL$")
 	public void postModifiedAipEvent(String siteId){
-		this.publishUrl = "/publish/xhs/qa/" + location
+		this.publishUrl = "/publish/xhstest/qa/" + location
 				+ "/notifications/alarm.json";
 		this.requestNumber = util.countRequests(publishUrl);
 		Assert.assertTrue(requestNumber >= 0);
