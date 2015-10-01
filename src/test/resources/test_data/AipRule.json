@@ -6,7 +6,7 @@
       }
   },
   "action": {
-    "endpoint": "http://nae.qa.rules.vacsv.com/notify",
+    "endpoint": "http://nae.qa.i.xrs.vacsv.com/notify",
     "code": {
       "location": "locationName",
       "tenant": "xh",

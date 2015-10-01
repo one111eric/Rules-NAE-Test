@@ -29,7 +29,7 @@ public class EventSetup {
 	public static final String RULES_LOCATION_URL = "http://rest.qa.rules.comcast.com/locations/";
 	public static final String MOLECULE_MAPPING_URL = "http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON = "test_data/AipRule.json";
-	public static final String INVALID_RULE_JSON="test_data/Invalid_Rule.json";
+	public static final String INVALID_RULE_JSON="test_data/InvalidRule.json";
 	public static final String EVENT_JSON = "test_data/EventToEEL.json";
 
 	private NAE_Real_Util util = new NAE_Real_Util();
@@ -83,7 +83,10 @@ public class EventSetup {
 	public String getEvent() {
 		return event;
 	}
-
+	
+    public void setEvent(String eventJson){
+    	this.event=eventJson;
+    }
 	/**
 	 * Method that setup location/siteId using provisions api
 	 */
@@ -228,7 +231,6 @@ public class EventSetup {
 		response = given().log().all().body(this.event).expect()
 				.statusCode(200).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
-		System.out.print(response.getBody().asString());
 	}
 
 	/**

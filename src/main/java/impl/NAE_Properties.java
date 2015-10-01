@@ -5,7 +5,7 @@ package impl;
  *
  */
 public class NAE_Properties {
-	public static final String NAE_URL = "http://nae.qa.rules.vacsv.com/notify";
+	public static final String NAE_URL = "http://nae.qa.i.xrs.vacsv.com/notify";
 	public static final String MOCK_SERVER = "mock.rules.vacsv.com";
 	public static final int MOCK_SERVER_PORT = 8080;
 	public static final boolean WITH_X_DEBUG_HEADER = true;

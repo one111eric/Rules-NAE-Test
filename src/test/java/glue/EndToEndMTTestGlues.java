@@ -126,16 +126,17 @@ public class EndToEndMTTestGlues {
 
 	@And("^I post an modified AIP event from this \"([^\"]*)\" to EEL$")
 	public void postModifiedAipEvent(String siteId) {
-		this.publishUrl = "/publish/xhstest/qa/" + location
+		this.publishUrl = "/publish/xhs/qa/" + location
 				+ "/notifications/alarm.json";
 		this.requestNumber = util.countRequests(publishUrl);
 		Assert.assertTrue(requestNumber >= 0);
 		LOGGER.debug("Number of Notification sent to Mock Server from "
 				+ location + " : " + requestNumber);
 		es.createUniqueEvent(es.getEvent(), 0);
-		es.getEvent().replace(
-				"/xhs/tps/siteId/panel/panelStatus/AlarmInProgress",
-				"/xhstest/tps/siteId/panel/panelStatus/AlarmInProgress");
+		String modifiedEvent=es.getEvent().replace(
+				"/xhs/tps/"+siteId+"/panel/panelStatus/AlarmInProgress",
+				"/xhstest/tps/"+siteId+"/panel/panelStatus/AlarmInProgress");
+		es.setEvent(modifiedEvent);
 		es.fireEvent();
 	}
 
