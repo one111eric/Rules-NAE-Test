@@ -22,7 +22,7 @@ import cucumber.api.java.en.Then;
 public class EndToEndMTTestGlues {
 	private static final Logger LOGGER = Logger
 			.getLogger(EndToEndMTTestGlues.class);
-    private EventSetup es;
+	private EventSetup es;
 	private String location;
 	private String site;
 	private String event;
@@ -31,53 +31,51 @@ public class EndToEndMTTestGlues {
 	private NAE_Real_Util util = new NAE_Real_Util();
 	private int notifReceived;
 	private static final String INVALID_EVENT = "test_data/WrongTopicEvent.json";
-	private static final String AIP_HANDLER="/xhs"; 
-	
+	private static final String AIP_HANDLER = "/xhs";
+
 	/**
 	 * Test for another tenant with AIP topic handler
 	 */
 	@Given("^I have a new tenant \"([^\"]*)\" with the same AIP topic handler$")
 	public void newTenantExists(String tenantName) {
-      Assert.assertTrue(util.verifyTenantExist(tenantName));
-      Assert.assertTrue(util.verifyTopicHandlerExist(tenantName, AIP_HANDLER));
+		Assert.assertTrue(util.verifyTenantExist(tenantName));
+		Assert.assertTrue(util.verifyTopicHandlerExist(tenantName, AIP_HANDLER));
 	}
 
 	@And("^I create \"([^\"]*)\" and \"([^\"]*)\" with \"([^\"]*)\" AIP rule for \"([^\"]*)\"$")
 	public void provisionNewTenant(String locationName, String siteId,
 			String type, String tenantName) throws Throwable {
-        if(type.equals("valid")){
-		es=new EventSetup();
-		es.eventSetup(locationName,siteId,tenantName,true);
-		this.location=es.getLocation();
-		this.site=es.getSite();
-		this.event=es.getEvent();
-        }
-        else {
-        	es=new EventSetup();
-    		es.eventSetup(locationName,siteId,tenantName,false);
-    		this.location=es.getLocation();
-    		this.site=es.getSite();
-    		this.event=es.getEvent();
-        }
-		
+		if (type.equals("valid")) {
+			es = new EventSetup();
+			es.eventSetup(locationName, siteId, tenantName, true);
+			this.location = es.getLocation();
+			this.site = es.getSite();
+			this.event = es.getEvent();
+		} else {
+			es = new EventSetup();
+			es.eventSetup(locationName, siteId, tenantName, false);
+			this.location = es.getLocation();
+			this.site = es.getSite();
+			this.event = es.getEvent();
+		}
+
 	}
 
 	@And("^I create \"([^\"]*)\" and \"([^\"]*)\" with \"([^\"]*)\" AIP rule for xh tenant$")
 	public void provisionXhTenant(String locationName, String siteId,
 			String type) throws Throwable {
-		if(type.equals("valid")){
-			es=new EventSetup();
-			es.eventSetup(locationName,siteId,"xh",true);
-			this.location=es.getLocation();
-			this.site=es.getSite();
-			this.event=es.getEvent();
-		}
-		else {
-			es=new EventSetup();
-			es.eventSetup(locationName,siteId,"xh",false);
-			this.location=es.getLocation();
-			this.site=es.getSite();
-			this.event=es.getEvent();
+		if (type.equals("valid")) {
+			es = new EventSetup();
+			es.eventSetup(locationName, siteId, "xh", true);
+			this.location = es.getLocation();
+			this.site = es.getSite();
+			this.event = es.getEvent();
+		} else {
+			es = new EventSetup();
+			es.eventSetup(locationName, siteId, "xh", false);
+			this.location = es.getLocation();
+			this.site = es.getSite();
+			this.event = es.getEvent();
 		}
 	}
 
@@ -89,15 +87,14 @@ public class EndToEndMTTestGlues {
 		Assert.assertTrue(requestNumber >= 0);
 		LOGGER.debug("Number of Notification sent to Mock Server from "
 				+ location + " : " + requestNumber);
-           if(type.equals("valid")){
-        	   es.createUniqueEvent(es.getEvent(), 0);
-        	   es.fireEvent();
-           }
-           else {
-        	   es.setupEvent(INVALID_EVENT);
-        	   es.createUniqueEvent(es.getEvent(), 0);
-        	   es.fireEvent();
-           }
+		if (type.equals("valid")) {
+			es.createUniqueEvent(es.getEvent(), 0);
+			es.fireEvent();
+		} else {
+			es.setupEvent(INVALID_EVENT);
+			es.createUniqueEvent(es.getEvent(), 0);
+			es.fireEvent();
+		}
 	}
 
 	@Then("^I should receive (\\d+) notification messages on mock server$")
@@ -123,12 +120,12 @@ public class EndToEndMTTestGlues {
 	 * Test for another tenant with modified AIP topic handler
 	 */
 	@Given("^I have a new tenant \"([^\"]*)\" with a modified AIP topic handler$")
-	public void newTenantTopicHandlerHExists(String tenantName){
+	public void newTenantTopicHandlerHExists(String tenantName) {
 		Assert.assertTrue(util.verifyTopicHandlerExist(tenantName, "/xhstest"));
 	}
-	
+
 	@And("^I post an modified AIP event from this \"([^\"]*)\" to EEL$")
-	public void postModifiedAipEvent(String siteId){
+	public void postModifiedAipEvent(String siteId) {
 		this.publishUrl = "/publish/xhstest/qa/" + location
 				+ "/notifications/alarm.json";
 		this.requestNumber = util.countRequests(publishUrl);
@@ -136,8 +133,10 @@ public class EndToEndMTTestGlues {
 		LOGGER.debug("Number of Notification sent to Mock Server from "
 				+ location + " : " + requestNumber);
 		es.createUniqueEvent(es.getEvent(), 0);
-		es.getEvent().replace("/xhs/tps/siteId/panel/panelStatus/AlarmInProgress", "/xhstest/tps/siteId/panel/panelStatus/AlarmInProgress");
+		es.getEvent().replace(
+				"/xhs/tps/siteId/panel/panelStatus/AlarmInProgress",
+				"/xhstest/tps/siteId/panel/panelStatus/AlarmInProgress");
 		es.fireEvent();
 	}
-	
+
 }

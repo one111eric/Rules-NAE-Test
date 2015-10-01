@@ -1,10 +1,14 @@
 package glue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import impl.Commons;
 import impl.EventSetup;
 import impl.NAE_Real_Util;
+import impl.TimeAndZone;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
@@ -29,6 +33,7 @@ public class EndToEndTestGlues {
 	private NAE_Real_Util util = new NAE_Real_Util();
 	private int notifReceived;
 	private static final String INVALID_EVENT = "test_data/Invalid_Event.json";
+	private List<TimeAndZone> timeList;
 
 	/**
 	 * Test: post an AIP event to EEL
@@ -87,7 +92,7 @@ public class EndToEndTestGlues {
 	}
 
 	@And("^the request body is in correct json format$")
-	public void checkReqeustFormat() {
+	public void checkRequestFormat() {
 		List<String> lastRequestBodyList = util.getRequestPayloadList(
 				publishUrl, notifReceived);
 		for (int i = 0; i < notifReceived; i++) {
@@ -104,10 +109,11 @@ public class EndToEndTestGlues {
 			String apnMessage=util.mapPayload(lastRequestBodyList.get(i)).getApns().getAlert();
 			
 			String gcmMessage=util.mapPayload(lastRequestBodyList.get(i)).getGcm().getOtherdata().getMessage();
+			String readableTime=util.transformTime(timeList.get(i).getTimestamp(), timeList.get(i).getTimezone());
 			
-			Assert.assertTrue(apnMessage.startsWith("An alarm was triggered at "));
+			Assert.assertTrue(apnMessage.startsWith("An alarm was triggered at "+readableTime));
 			Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
-			Assert.assertTrue(gcmMessage.startsWith("Since "));
+			Assert.assertTrue(gcmMessage.startsWith("Since "+readableTime));
 			Assert.assertTrue(apnMessage.endsWith("Touch to view details."));
 		}
 		
@@ -122,11 +128,13 @@ public class EndToEndTestGlues {
 	 */
 	@When("^I post (\\d+) number of \"([^\"]*)\" events with (\\d+) secs of delay to EEL$")
 	public void postMutipleEvents(int n, String type, int x) throws Throwable {
+		List<TimeAndZone> list=new ArrayList<TimeAndZone>();
 		if (type.equals("identical")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
 			for (int i = 0; i < n; i++) {
 				newEvent.fireEvent();
+				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
 				Commons.delay(x * 1000);
 			}
 		} else if (type.equals("unique")) {
@@ -135,9 +143,11 @@ public class EndToEndTestGlues {
 			for (int i = 0; i < n; i++) {
 				newEvent.createUniqueEvent(newEvent.getEvent(), i);
 				newEvent.fireEvent();
-				Commons.delay(x * 1000);
+				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
+				Commons.delay(x * 1000);	
 			}
 		}
+		this.timeList=list;
 	}
 	
 	

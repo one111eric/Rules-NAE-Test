@@ -14,7 +14,7 @@ Scenario: Empty Json Request body
 Scenario: Invalid Json size 
 	When I post a Json file exceeding the character limit 
 	Then I should get an request too large error message 
-	
+@run	
 Scenario Outline: Wrong request method 
 	When I make the http request with Verb "<verb>"
 	Then I should get http post required error message 

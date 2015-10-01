@@ -492,6 +492,7 @@ public class NAE_Real_Util {
 		    if(tenantContent.containsKey(topicHandler)){
 		    	ifExist=true;
 		    }
+		    
 		}
 		catch(Exception e){
 			LOGGER.error(e);

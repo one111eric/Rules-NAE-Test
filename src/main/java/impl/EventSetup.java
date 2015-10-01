@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.Test;
 
+import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -36,6 +37,7 @@ public class EventSetup {
 	private String location;
 	private String site;
 	private String event;
+	private String rule;
 	private Map<String, String> headers = new HashMap<String, String>();
 
 	private static final Logger LOGGER = Logger.getLogger(EventSetup.class);
@@ -151,7 +153,6 @@ public class EventSetup {
 	public void setupRule() throws Throwable {
 		String ruleNumber = "1234";
 		String myRule = util.getFile(RULE_JSON);
-		
 		myRule = myRule.replace("locationName", location);
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
@@ -159,6 +160,7 @@ public class EventSetup {
 		response = given().log().all().headers(this.headers).body(myRule)
 				.expect().statusCode(200).put(ruleEndPoint);
 		response.prettyPrint();
+		this.rule=myRule;
 	}
 	
 	public void setupRule(String locationName) throws Throwable {
@@ -172,6 +174,7 @@ public class EventSetup {
 		response = given().log().all().headers(this.headers).body(myRule)
 				.expect().statusCode(200).put(ruleEndPoint);
 		response.prettyPrint();
+		this.rule=myRule;
 	}
 	
 	public void setupRule(String locationName,String tenantName,boolean isRuleValid) throws Throwable {
@@ -192,6 +195,7 @@ public class EventSetup {
 		response = given().log().all().headers(headers).body(myRule)
 				.expect().statusCode(200).put(ruleEndPoint);
 		response.prettyPrint();
+		this.rule=myRule;
 		
 	}
 
@@ -224,6 +228,7 @@ public class EventSetup {
 		response = given().log().all().body(this.event).expect()
 				.statusCode(200).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
+		System.out.print(response.getBody().asString());
 	}
 
 	/**
@@ -263,7 +268,43 @@ public class EventSetup {
 		this.event = uniqueEvent;
 	}
 
+	public Long getEventTimestamp(){
+		Long timestampTime=new Long(0);
+		String eventBody = this.event;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = mapper.readTree(eventBody);
+			JsonNode contentNode = rootNode.path("content");
+			JsonNode timestampNode = contentNode.path("timestamp");
+			long timestamp = timestampNode.getLongValue();
+			timestampTime=new Long(timestamp);
+		} catch (JsonProcessingException e) {
+			LOGGER.error(e);
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
+		return timestampTime;
+	}
 	
+	public String getRuleTimeZone(){
+		//default timeZone
+		String timeZone="GMT";
+		String rule= util.getFile(RULE_JSON);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = mapper.readTree(rule);
+			JsonNode actionNode = rootNode.path("action");
+			JsonNode codeNode=actionNode.path("code");
+			JsonNode paramsNode = codeNode.path("params");
+			JsonNode timezoneNode = paramsNode.path("timezone");
+			timeZone=timezoneNode.getTextValue();
+		} catch (JsonProcessingException e) {
+			LOGGER.error(e);
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
+		return timeZone;
+	}
 	
 	
 	/**
@@ -290,8 +331,12 @@ public class EventSetup {
 		}
 		return provisionsBody;
 	}
-	
-	
+//	@Test
+//	public void testTimezone() throws Throwable{
+//		EventSetup es=new EventSetup();
+//		//es.setupRule();
+//		es.getRuleTimeZone();
+//	}
 
 	// simple unit test to print current timestamp
 	// @Test
