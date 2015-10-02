@@ -57,17 +57,20 @@ public class EndToEndTestGlues {
 	@And("^I post an \"([^\"]*)\" Event of that location to EEL$")
 	public void postEventToEEL(String type) throws Throwable {
 		Assert.assertTrue(type.equals("valid") || type.equals("invalid"));
+		List<TimeAndZone> list=new ArrayList<TimeAndZone>();
 		if (type.equals("valid")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
 			newEvent.createUniqueEvent(newEvent.getEvent(), 1);
 			newEvent.fireEvent();
+			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
 		} else if (type.equals("invalid")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup(INVALID_EVENT);
 			newEvent.fireEvent();
+			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
 		}
-
+        this.timeList=list;
 	}
 
 	@Then("^I should see the number of the request to that location increased by (\\d+)$")
@@ -109,12 +112,12 @@ public class EndToEndTestGlues {
 			String apnMessage=util.mapPayload(lastRequestBodyList.get(i)).getApns().getAlert();
 			
 			String gcmMessage=util.mapPayload(lastRequestBodyList.get(i)).getGcm().getOtherdata().getMessage();
-			String readableTime=util.transformTime(timeList.get(i).getTimestamp(), timeList.get(i).getTimezone());
-			
+			String readableTime=util.transformTime(timeList.get(i).getTimestamp()/1000, timeList.get(i).getTimezone());
+			LOGGER.debug(readableTime);
 			Assert.assertTrue(apnMessage.startsWith("An alarm was triggered at "+readableTime));
 			Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
 			Assert.assertTrue(gcmMessage.startsWith("Since "+readableTime));
-			Assert.assertTrue(apnMessage.endsWith("Touch to view details."));
+			Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
 		}
 		
 	}

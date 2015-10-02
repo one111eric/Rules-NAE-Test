@@ -180,7 +180,7 @@ public class NAE_Real_Util {
 	public String transformTime(long timeStamp, String timeZone) {
 		String timeString;
 		Date time = new Date(timeStamp * 1000);
-		SimpleDateFormat formatter = new SimpleDateFormat("hh:mma");
+		SimpleDateFormat formatter = new SimpleDateFormat("h:mma");
 		TimeZone tz = TimeZone.getTimeZone(timeZone);
 		formatter.setTimeZone(tz);
 		timeString = formatter.format(time).toLowerCase();

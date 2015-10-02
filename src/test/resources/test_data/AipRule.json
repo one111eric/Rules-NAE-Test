@@ -17,7 +17,7 @@
       "params": {
           "deviceid": "8987917728960595555",
           "duration": "10000",
-          "timezone":"PST"
+          "timezone":"EST"
       },
       "data": {
       	  "env": "qa",
