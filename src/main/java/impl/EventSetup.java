@@ -21,7 +21,8 @@ import static com.jayway.restassured.RestAssured.given;
 
 /**
  * Class for Event Firing Setups
- *
+ * Inlcuding setting up location/siteId mapping
+ * Inject rules based on tenants etc.
  * @author Miao Xiang
  *
  */
@@ -65,6 +66,15 @@ public class EventSetup {
 		setupEvent(eventJson);
 	}
 	
+	/**
+	 * Method that setup a location/siteid/rule/event based on location name, siteid, tenant name and if rule is valid
+	 * 
+	 * @param locationName
+	 *            : location name
+	 * @param siteId: site ID
+	 * @param tenantName: tenant name
+	 * @param isRuleValid: rule valid or not
+	 */
 	public void eventSetup(String locationName,String siteId,String tenantName, boolean isRuleValid) throws Throwable{
 		setupProvisions(locationName,siteId,tenantName);
 		setupRule(locationName,tenantName,isRuleValid);
@@ -111,9 +121,9 @@ public class EventSetup {
 	}
 	/**
 	 * Method setting up location/site based on their names and tenant name
-	 * @param locationName
-	 * @param siteId
-	 * @param tenantName
+	 * @param locationName: location name
+	 * @param siteId: site ID
+	 * @param tenantName: tenant name
 	 */
 	public void setupProvisions(String locationName,String siteId,String tenantName){
 		Response response = null;
@@ -166,6 +176,10 @@ public class EventSetup {
 		this.rule=myRule;
 	}
 	
+	/**
+	 * Method that setup a rule to a location
+	 * @param lacationName: location name
+	 */
 	public void setupRule(String locationName) throws Throwable {
 		String ruleNumber = "1234";
 		String myRule = util.getFile(RULE_JSON);
@@ -180,6 +194,12 @@ public class EventSetup {
 		this.rule=myRule;
 	}
 	
+	/**
+	 * Method that setup a rule based on a location, tenant name, and if the rule is valid
+	 * @param locationName: location name
+	 * @param tenantName: tenant name
+	 * @param isRuleValid: rule valid or not
+	 */
 	public void setupRule(String locationName,String tenantName,boolean isRuleValid) throws Throwable {
 		String ruleNumber = "1234";
 		Map<String, String> headers = new HashMap<String, String>();
@@ -269,7 +289,10 @@ public class EventSetup {
 		}
 		this.event = uniqueEvent;
 	}
-
+    
+	/**
+	 * Method that get the timestamp from a event JSON
+	 */
 	public Long getEventTimestamp(){
 		Long timestampTime=new Long(0);
 		String eventBody = this.event;
@@ -288,6 +311,9 @@ public class EventSetup {
 		return timestampTime;
 	}
 	
+	/**
+	 * Method that gets the timezone field value from the AIP rule JSON
+	 */
 	public String getRuleTimeZone(){
 		//default timeZone
 		String timeZone="GMT";

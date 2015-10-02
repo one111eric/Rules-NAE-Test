@@ -2,7 +2,7 @@ package impl;
 
 /**
  * Properties used by NAE/ENDtoEnd test
- *
+ * Mainly server endpoints
  */
 public class NAE_Properties {
 	public static final String NAE_URL = "http://nae.qa.i.xrs.vacsv.com/notify";

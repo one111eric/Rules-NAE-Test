@@ -1,5 +1,7 @@
 /**
  * @author Bobby Jap
+ * Miao copied this to verify server response code in
+ * a more readable manner
  */
 
 package impl;
