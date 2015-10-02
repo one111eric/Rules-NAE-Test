@@ -480,7 +480,15 @@ public class NAE_Real_Util {
 		}
 		return ifExist;
 	}
-    
+	
+	/**
+	 * Method verify if a tenant has a specific topic handler
+	 * 
+	 * @param String
+	 *            : tenant name
+	 * @param String: topic handler name           
+	 * @return boolean: True of False to determine if the TH exist for a certain tenant
+	 */
 	public boolean verifyTopicHandlerExist(String tenant, String topicHandler){
 		boolean ifExist=false;
 		Response response = null;
