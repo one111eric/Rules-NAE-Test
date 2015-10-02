@@ -104,7 +104,7 @@ public class EndToEndTestGlues {
 		}
 	}
 
-	@And("^the messages are in correct format$")
+	@And("^the messages are in correct format with correct timestamp$")
 	public void checkMessageText(){
 		List<String> lastRequestBodyList = util.getRequestPayloadList(
 				publishUrl, notifReceived);
@@ -120,10 +120,6 @@ public class EndToEndTestGlues {
 			Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
 		}
 		
-	}
-	@And("^the timestamp is correct$")
-	public void checkTimestamp() {
-        
 	}
 
 	/**
