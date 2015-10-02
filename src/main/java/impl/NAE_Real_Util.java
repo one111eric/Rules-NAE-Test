@@ -508,14 +508,14 @@ public class NAE_Real_Util {
 	}
 
 	// a simple unit test for time transform method
-	// @Test
+	//@Test
 	public void timetest() throws ParseException {
 		NAE_Real_Util util = new NAE_Real_Util();
 		LOGGER.debug(util.expectedTime("test_data/Valid_JSON.json"));
 	}
    
 	// a unit test for verify tenant exist method
-	@Test
+	//@Test
 	public void tenantexisttest(){
 	NAE_Real_Util util = new NAE_Real_Util();
 	util.verifyTenantExist("Tenant3");
