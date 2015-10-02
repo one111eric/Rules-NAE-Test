@@ -57,20 +57,22 @@ public class EndToEndTestGlues {
 	@And("^I post an \"([^\"]*)\" Event of that location to EEL$")
 	public void postEventToEEL(String type) throws Throwable {
 		Assert.assertTrue(type.equals("valid") || type.equals("invalid"));
-		List<TimeAndZone> list=new ArrayList<TimeAndZone>();
+		List<TimeAndZone> list = new ArrayList<TimeAndZone>();
 		if (type.equals("valid")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
 			newEvent.createUniqueEvent(newEvent.getEvent(), 1);
 			newEvent.fireEvent();
-			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
+			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
+					.getRuleTimeZone()));
 		} else if (type.equals("invalid")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup(INVALID_EVENT);
 			newEvent.fireEvent();
-			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
+			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
+					.getRuleTimeZone()));
 		}
-        this.timeList=list;
+		this.timeList = list;
 	}
 
 	@Then("^I should see the number of the request to that location increased by (\\d+)$")
@@ -105,21 +107,25 @@ public class EndToEndTestGlues {
 	}
 
 	@And("^the messages are in correct format with correct timestamp$")
-	public void checkMessageText(){
+	public void checkMessageText() {
 		List<String> lastRequestBodyList = util.getRequestPayloadList(
 				publishUrl, notifReceived);
-		for(int i=0;i<notifReceived;i++){
-			String apnMessage=util.mapPayload(lastRequestBodyList.get(i)).getApns().getAlert();
-			
-			String gcmMessage=util.mapPayload(lastRequestBodyList.get(i)).getGcm().getOtherdata().getMessage();
-			String readableTime=util.transformTime(timeList.get(i).getTimestamp()/1000, timeList.get(i).getTimezone());
+		for (int i = 0; i < notifReceived; i++) {
+			String apnMessage = util.mapPayload(lastRequestBodyList.get(i))
+					.getApns().getAlert();
+
+			String gcmMessage = util.mapPayload(lastRequestBodyList.get(i))
+					.getGcm().getOtherdata().getMessage();
+			String readableTime = util.transformTime(timeList.get(i)
+					.getTimestamp() / 1000, timeList.get(i).getTimezone());
 			LOGGER.debug(readableTime);
-			Assert.assertTrue(apnMessage.startsWith("An alarm was triggered at "+readableTime));
+			Assert.assertTrue(apnMessage
+					.startsWith("An alarm was triggered at " + readableTime));
 			Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
-			Assert.assertTrue(gcmMessage.startsWith("Since "+readableTime));
+			Assert.assertTrue(gcmMessage.startsWith("Since " + readableTime));
 			Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
 		}
-		
+
 	}
 
 	/**
@@ -127,13 +133,14 @@ public class EndToEndTestGlues {
 	 */
 	@When("^I post (\\d+) number of \"([^\"]*)\" events with (\\d+) secs of delay to EEL$")
 	public void postMutipleEvents(int n, String type, int x) throws Throwable {
-		List<TimeAndZone> list=new ArrayList<TimeAndZone>();
+		List<TimeAndZone> list = new ArrayList<TimeAndZone>();
 		if (type.equals("identical")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
 			for (int i = 0; i < n; i++) {
 				newEvent.fireEvent();
-				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
+				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
+						.getRuleTimeZone()));
 				Commons.delay(x * 1000);
 			}
 		} else if (type.equals("unique")) {
@@ -142,13 +149,12 @@ public class EndToEndTestGlues {
 			for (int i = 0; i < n; i++) {
 				newEvent.createUniqueEvent(newEvent.getEvent(), i);
 				newEvent.fireEvent();
-				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent.getRuleTimeZone()));
-				Commons.delay(x * 1000);	
+				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
+						.getRuleTimeZone()));
+				Commons.delay(x * 1000);
 			}
 		}
-		this.timeList=list;
+		this.timeList = list;
 	}
-	
-	
 
 }

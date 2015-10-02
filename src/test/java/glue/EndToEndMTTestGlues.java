@@ -133,9 +133,12 @@ public class EndToEndMTTestGlues {
 		LOGGER.debug("Number of Notification sent to Mock Server from "
 				+ location + " : " + requestNumber);
 		es.createUniqueEvent(es.getEvent(), 0);
-		String modifiedEvent=es.getEvent().replace(
-				"/xhs/tps/"+siteId+"/panel/panelStatus/AlarmInProgress",
-				"/xhstest/tps/"+siteId+"/panel/panelStatus/AlarmInProgress");
+		String modifiedEvent = es.getEvent()
+				.replace(
+						"/xhs/tps/" + siteId
+								+ "/panel/panelStatus/AlarmInProgress",
+						"/xhstest/tps/" + siteId
+								+ "/panel/panelStatus/AlarmInProgress");
 		es.setEvent(modifiedEvent);
 		es.fireEvent();
 	}
