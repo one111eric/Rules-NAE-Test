@@ -18,7 +18,7 @@ import cucumber.api.java.en.When;
  */
 public class EndToEndTTLTestGlues {
 	private static final Logger LOGGER = Logger
-			.getLogger(EndToEndMTTestGlues.class);
+			.getLogger(EndToEndTTLTestGlues.class);
 	private EventSetup es;
 	private String location;
 	private String site;
@@ -31,10 +31,10 @@ public class EndToEndTTLTestGlues {
 	private static final String AIP_HANDLER = "/xhs";
 	
 	
-	@Given("^\"([^\"]*)\" has a rule with TTL (\\d+) seconds$")
-	public void setupTTLRuleToLocation(String locationName,int ttlTime){
+	@Given("^\"([^\"]*)\" with site \"([^\"]*)\" has a rule with TTL (\\d+) seconds$")
+	public void setupTTLRuleToLocation(String locationName,String siteId,int ttlTime) throws Throwable{
 		es=new EventSetup();
-		
+		es.eventSetupNew(locationName,siteId,"xh",true,ttlTime);
 	}
 	@And("^I post an Event of \"([^\"]*)\" to EEL with SessionId \"([^\"]*)\"$")
 	public void postEventWithSessionId(String locationName,String sessionId){

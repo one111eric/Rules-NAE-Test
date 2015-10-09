@@ -15,13 +15,13 @@
  },
  "actions": [
    {
-     "endpoint": "http://nae.dev.i.xrs.vacsv.com/notify",
+     "endpoint": "http://nae.qa.i.xrs.vacsv.com/notify",
      "code": {
-       "location": "?location",
+       "location": "locationName",
        "tenant": "xh",
        "type": "ALARM_IN_PROGRESS",
        "transport": [
-           "x1"
+           "emo"
        ],
        "params": {
            "deviceid": "8987917728960591079",
@@ -29,14 +29,14 @@
            "timezone": "PST8PDT"
        },
        "data": {
-           "env": "tps",
+           "env": "qa",
            "timestamp": "?time",
            "zone": ""
        }
      }
    },
    {
-     "code":"Env.AddFact('', {alarmSessionId: id, ttl: 10});"
+     "code":"Env.AddFact('', {alarmSessionId: id, ttl: ?livetime});"
    }
  ]
 }

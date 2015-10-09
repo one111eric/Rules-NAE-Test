@@ -87,11 +87,14 @@ public class EventSetup {
 		setupRule(locationName, tenantName, isRuleValid);
 		setupEvent();
 	}
-    //new setup for new Event and Rule
-	public void eventSetupNew(String locationName, String siteId,String tenantName, boolean isRuleValid,String sessionId) throws Throwable{
-		this.session=sessionId;
-		setupProvisions(locationName,siteId,tenantName);
-		setupRuleNew(locationName,tenantName,isRuleValid);
+
+	// new setup for new Event and Rule
+	public void eventSetupNew(String locationName, String siteId,
+			String tenantName, boolean isRuleValid, 
+			int aliveTime) throws Throwable {
+		//this.session = sessionId;
+		setupProvisions(locationName, siteId, tenantName);
+		setupRuleNew(locationName, tenantName, isRuleValid, aliveTime);
 		setupEventNew();
 	}
 	
@@ -257,7 +260,7 @@ public class EventSetup {
 
 	//setup new rule
 	public void setupRuleNew(String locationName, String tenantName,
-			boolean isRuleValid) throws Throwable {
+			boolean isRuleValid, int aliveTime) throws Throwable {
 		String ruleNumber = "1234";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Xrs-Tenant-Id", tenantName);
@@ -268,7 +271,7 @@ public class EventSetup {
 			myRule = util.getFile(INVALID_RULE_JSON);
 		}
 		myRule = myRule.replace("locationName", location).replace("xh",
-				tenantName);
+				tenantName).replace("?alivetime",String.valueOf(aliveTime));
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
 		Response response = null;
@@ -291,7 +294,7 @@ public class EventSetup {
 	public void setupEventNew(){
 		String myEvent = util.getFile(EVENT_JSON_NEW);
 		myEvent = myEvent.replace("siteId", getSite());
-		myEvent=myEvent.replace("{SesionId}", getSession());
+		//myEvent=myEvent.replace("{SesionId}", getSession());
 		this.event = myEvent;
 	}
 
