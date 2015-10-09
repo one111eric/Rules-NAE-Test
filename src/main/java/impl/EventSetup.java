@@ -30,11 +30,13 @@ public class EventSetup {
 	public static final String RULES_LOCATION_URL = "http://rest.qa.rules.comcast.com/locations/";
 	public static final String MOLECULE_MAPPING_URL = "http://molecule.qa.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON = "test_data/AipRule.json";
+	public static final String RULE_JSON_NEW="test_data/NewAipRule.json";
 	public static final String INVALID_RULE_JSON = "test_data/InvalidRule.json";
 	public static final String EVENT_JSON = "test_data/EventToEEL.json";
-
+    public static final String EVENT_JSON_NEW="test_data/NewAipEvent.json";
 	private NAE_Real_Util util = new NAE_Real_Util();
 
+	private String session;
 	private String location;
 	private String site;
 	private String event;
@@ -85,7 +87,14 @@ public class EventSetup {
 		setupRule(locationName, tenantName, isRuleValid);
 		setupEvent();
 	}
-
+    //new setup for new Event and Rule
+	public void eventSetupNew(String locationName, String siteId,String tenantName, boolean isRuleValid,String sessionId) throws Throwable{
+		this.session=sessionId;
+		setupProvisions(locationName,siteId,tenantName);
+		setupRuleNew(locationName,tenantName,isRuleValid);
+		setupEventNew();
+	}
+	
 	// getters
 	public String getLocation() {
 		return location;
@@ -101,6 +110,10 @@ public class EventSetup {
 
 	public void setEvent(String eventJson) {
 		this.event = eventJson;
+	}
+	
+	public String getSession(){
+		return session;
 	}
 
 	/**
@@ -242,12 +255,43 @@ public class EventSetup {
 
 	}
 
+	//setup new rule
+	public void setupRuleNew(String locationName, String tenantName,
+			boolean isRuleValid) throws Throwable {
+		String ruleNumber = "1234";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Xrs-Tenant-Id", tenantName);
+		String myRule = "";
+		if (isRuleValid) {
+			myRule = util.getFile(RULE_JSON_NEW);
+		} else {
+			myRule = util.getFile(INVALID_RULE_JSON);
+		}
+		myRule = myRule.replace("locationName", location).replace("xh",
+				tenantName);
+		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
+				+ ruleNumber;
+		Response response = null;
+		response = given().log().all().headers(headers).body(myRule).expect()
+				.statusCode(200).put(ruleEndPoint);
+		response.prettyPrint();
+		this.rule = myRule;
+
+	}
 	/**
 	 * Method that setup an event JSON body
 	 */
 	public void setupEvent() {
 		String myEvent = util.getFile(EVENT_JSON);
 		myEvent = myEvent.replace("siteId", getSite());
+		this.event = myEvent;
+	}
+	
+	//setup new event
+	public void setupEventNew(){
+		String myEvent = util.getFile(EVENT_JSON_NEW);
+		myEvent = myEvent.replace("siteId", getSite());
+		myEvent=myEvent.replace("{SesionId}", getSession());
 		this.event = myEvent;
 	}
 
