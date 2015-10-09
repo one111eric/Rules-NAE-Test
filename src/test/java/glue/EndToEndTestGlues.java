@@ -95,7 +95,26 @@ public class EndToEndTestGlues {
 		// Assert.assertTrue(increased>=y&&increased <=y*2);
 
 	}
+	@Then("^I should see the number of the request to that location increased by equal or less than (\\d+)$")
+	public void checkRequestIncreasedByLess(int y) {
+		Commons.delay(30000);
+		int newRequestNumber = util.countRequests(publishUrl);
+		LOGGER.debug(publishUrl);
+		LOGGER.debug("Number of Notification sent to Mock Server from "
+				+ location + " : " + newRequestNumber);
+		int increased = newRequestNumber - requestNumber;
+		this.notifReceived = increased;
+		LOGGER.debug("Number of new Notification sent to Mock Server from "
+				+ location + " : " + notifReceived);
+		List<String> lastRequestBodyList = util.getRequestPayloadList(
+				publishUrl, notifReceived);
+		for (int i = 0; i < notifReceived; i++) {
+			LOGGER.debug(lastRequestBodyList.get(i));
+		}
+		Assert.assertTrue(increased<= y);
+		// Assert.assertTrue(increased>=y&&increased <=y*2);
 
+	}  
 	@And("^the request body is in correct json format$")
 	public void checkRequestFormat() {
 		List<String> lastRequestBodyList = util.getRequestPayloadList(

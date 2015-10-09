@@ -22,7 +22,7 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
 
 @CucumberOptions(plugin={"pretty","html:target/cucumber","json:target/cucumber.json"},glue={"glue"},features={"src/test/resources/test_features/" },
 
-  tags={"@EndToEndMT-XRULES-1168,@EndToEnd-XRULES-347"})
+  tags={"@EndToEndMT-XRULES-1168, @EndToEnd-XRULES-347"})
 //
 
 @Test

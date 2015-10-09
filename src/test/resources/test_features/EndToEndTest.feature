@@ -18,7 +18,7 @@ Scenario Outline: Send n number of identical/unique events with x secs delay and
   When I check the number of request from "<location>" received by mock server
   Then I should get a number
   When I post <n> number of "<type>" events with <x> secs of delay to EEL
-  Then I should see the number of the request to that location increased by <y>
+  Then I should see the number of the request to that location increased by equal or less than <y>
   And the request body is in correct json format
   Examples: 
   |location|n|type|x|y|
