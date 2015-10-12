@@ -49,7 +49,7 @@
         "_type": "http://ourwiki.comcast.com/IoT/event/state/change",
         "name": "AlarmInProgress",
         "timestamp": 1439476057719,
-        "alarmSessionId": "{SessionId}",
+        "alarmSessionId": "mySessionId",
         "metadata": {
             "environment": "qa",
             "site": "siteId"

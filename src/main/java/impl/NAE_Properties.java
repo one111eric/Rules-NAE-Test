@@ -16,4 +16,8 @@ public class NAE_Properties {
 	public static final String PROVISION_ENDPOINT = "http://rest.qa.rules.comcast.com/provisions";
 	public static final String EEL_EVENT_ENDPOINT = "http://eel.qa.rules.comcast.com/elementsevent";
     public static final String EEL_HEALTH_ENDPOINT= "http://eel.qa.rules.comcast.com/health";
+    public static final String LOCATION_ENDPOINT = REST_ENDPOINT + "locations/";
+	public static final String MOLECULE_ENDPOINT = "http://molecule.qa.i.xrs.vacsv.com/";
+	public static final String MOLECULE_MAPPING_ENDPOINT = MOLECULE_ENDPOINT
+			+ "mappings/xh/";
 }

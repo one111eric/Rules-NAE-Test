@@ -357,6 +357,39 @@ public class EventSetup {
 		this.event = uniqueEvent;
 	}
 
+	public void createUniqueEventNew(String eventJson, int n, String sessionId) {
+		String uniqueEvent = this.event;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = mapper.readTree(uniqueEvent);
+			JsonNode contentNode = rootNode.path("content");
+
+			JsonNode timestamp = contentNode.path("timestamp");
+			JsonNode sessionIdNode = contentNode.path("alarmSessionId");
+			String timestampString = String.valueOf(timestamp.getLongValue());
+
+			JsonNode eventId = contentNode.path("eventId");
+			String eventIdString = eventId.getTextValue();
+
+			long currentTimestamp = System.currentTimeMillis();
+			long newTimestamp = currentTimestamp + 60 * 1000 * n;
+			String newTimestampString = String.valueOf(newTimestamp);
+			String newEventIdString = newTimestampString;
+			uniqueEvent = uniqueEvent.replace(timestampString,
+					newTimestampString)
+					.replace(eventIdString, newEventIdString).replace(sessionIdNode.getTextValue(), sessionId);
+			LOGGER.debug(newEventIdString);
+			LOGGER.debug(sessionIdNode.asText());
+			LOGGER.debug(sessionId);
+		} catch (JsonProcessingException e) {
+			LOGGER.error(e);
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
+		this.event = uniqueEvent;
+	}
+	
+	
 	/**
 	 * Method that get the timestamp from a event JSON
 	 */

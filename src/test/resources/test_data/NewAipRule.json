@@ -36,7 +36,7 @@
      }
    },
    {
-     "code":"Env.AddFact('', {alarmSessionId: id, ttl: ?livetime});"
+     "code":"Env.AddFact('', {alarmSessionId: id, ttl: ?alivetime});"
    }
  ]
 }
