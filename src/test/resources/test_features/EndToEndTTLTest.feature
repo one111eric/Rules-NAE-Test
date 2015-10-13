@@ -12,6 +12,9 @@ Scenario Outline: Basic end to end to verify new rule works
 		|MiaoLocation10|850601|10|miaoSession1|1|
 		
 Scenario Outline: test how different delays and session names affect results
+                  1. post two events with same sessionId with wait time within TTL
+                  2. post two events with different sessionId with wait time within TTL
+                  3. post two events with same sessionId with wait time beyond TTL
 	Given "<location>" with site "<site_id>" has a rule with TTL <ttl_time> seconds 
 	When I check the number of requests from "<location>" received by mock server
 	Then I should have a number
@@ -27,6 +30,8 @@ Scenario Outline: test how different delays and session names affect results
 		|MiaoLocation10|850601|10|miaoSession5|11|miaoSession5|2|
 		
 Scenario Outline: test how new Session Id behave for two locations
+                  1. two locations with different sessionId
+                  2. two locations with same sessionId
     Given "<location1>" with site "<site_id1>" has a rule with TTL <ttl_time> seconds
     Given "<location2>" with site "<site_id2>" has a rule with TTL <ttl_time> seconds
     When I check the number of all requests received by mock server
