@@ -75,6 +75,15 @@ public class EndToEndTTLTestGlues {
 		this.eventPosted+=1;
 	}
 	
+	@And("^I post an AIP Event of \"([^\"]*)\" with \"([^\"]*)\" to EEL with SessionId \"([^\"]*)\"$")
+	public void postEventWithSessionIdSiteId(String locationName,String siteId, String sessionId){
+		LOGGER.debug(this.eventPosted);
+		es.setupEventNew(siteId);
+		es.createUniqueEventNew(es.getEvent(), this.eventPosted, sessionId);
+		es.fireEvent();
+		this.eventPosted+=1;
+	}
+	
 	
 	@And("^I wait (\\d+) seconds$")
 	public void threadWait(int waitTime){

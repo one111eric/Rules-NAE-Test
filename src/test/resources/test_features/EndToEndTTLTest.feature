@@ -36,8 +36,8 @@ Scenario Outline: test how new Session Id behave for two locations
     Given "<location2>" with site "<site_id2>" has a rule with TTL <ttl_time> seconds
     When I check the number of all requests received by mock server
 	Then I should get a number of all requests received by mock server
-    And I post an AIP Event of "<location1>" to EEL with SessionId "<SessionId1>"
-	And I post an AIP Event of "<location2>" to EEL with SessionId "<SessionId2>"
+    And I post an AIP Event of "<location1>" with "<site_id1>" to EEL with SessionId "<SessionId1>"
+	And I post an AIP Event of "<location2>" with "<site_id2>" to EEL with SessionId "<SessionId2>"
 	Then I should see the number of all requests to mock server increased by <x>
 	
 	Examples:

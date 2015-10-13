@@ -297,6 +297,13 @@ public class EventSetup {
 		//myEvent=myEvent.replace("{SesionId}", getSession());
 		this.event = myEvent;
 	}
+	
+	public void setupEventNew(String siteId){
+		String myEvent = util.getFile(EVENT_JSON_NEW);
+		myEvent = myEvent.replace("siteId", siteId);
+		//myEvent=myEvent.replace("{SesionId}", getSession());
+		this.event = myEvent;
+	}
 
 	/**
 	 * Method that setup an event based on an existing even JSON
