@@ -52,12 +52,16 @@ public class NAECucumberTest extends AbstractTestNGCucumberTests{
 			File file=new File("times.csv");
 			if(!file.exists()){
 				file.createNewFile();
+				Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv"))); 
+				writer.write("eventId"+","+"submittedTimeMillis"+","+"mockReceivedTimeMillis"+",\n");
+				writer.flush();
+				writer.close();
 			}
 			else{
 				file.delete();
 				file.createNewFile();
 				Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv"))); 
-					writer.write("eventId"+","+"submittedTimeMillis"+","+"mockReceivedTimeMillis"+"\n");
+					writer.write("eventId"+","+"submittedTimeMillis"+","+"mockReceivedTimeMillis"+",\n");
 					writer.flush();
 					writer.close();
 			}

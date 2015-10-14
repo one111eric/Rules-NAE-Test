@@ -70,7 +70,7 @@ public class EndToEndTestGlues {
 				
 			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
 				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
-					writer.write(eventId+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+"\n");
+					writer.write(eventId+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+",\n");
 					writer.flush();
 				    writer.close();
 				} catch (FileNotFoundException e) {
@@ -90,7 +90,6 @@ public class EndToEndTestGlues {
 		this.location = location;
 		this.publishUrl = "/publish/xhs/qa/" + location
 				+ "/notifications/alarm.json";
-
 	}
 
 	@Then("^I should get a number$")
