@@ -1,5 +1,15 @@
 package glue;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,12 +17,20 @@ import java.util.Map;
 
 import impl.Commons;
 import impl.EventSetup;
+import impl.NAE_Properties;
 import impl.NAE_Real_Util;
 import impl.TimeAndZone;
+import impl.TimeData;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
+import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -34,7 +52,36 @@ public class EndToEndTestGlues {
 	private int notifReceived;
 	private static final String INVALID_EVENT = "test_data/Invalid_Event.json";
 	private List<TimeAndZone> timeList;
+	private List<TimeData> timeDataList=new ArrayList<TimeData>();
 
+	@After
+	//And("^I write the data to file$")
+	public void afterScenario(){
+		for(TimeData td : timeDataList){
+			String eventId=td.getEventId();
+			//LOGGER.debug(eventId);
+			//Commons.delay(10000);
+			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
+			RequestPatternBuilder builder = new RequestPatternBuilder(
+					RequestMethod.POST, urlMatching("/publish/xhs/qa/.*")).withHeader("X-B3-TraceId", equalTo(eventId));
+			List<LoggedRequest> reqs = findAll(builder);
+			int listSize = reqs.size();
+			if(listSize>=1){
+				
+			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
+				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
+					writer.write(eventId+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+"\n");
+					writer.flush();
+				    writer.close();
+				} catch (FileNotFoundException e) {
+					LOGGER.error(e);
+				} catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Test: post an AIP event to EEL
 	 */
@@ -62,9 +109,13 @@ public class EndToEndTestGlues {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup();
 			newEvent.createUniqueEvent(newEvent.getEvent(), 1);
+			String currentTimestamp=String.valueOf(System.currentTimeMillis());
+			String eventId=newEvent.getEventId();
 			newEvent.fireEvent();
 			list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
 					.getRuleTimeZone()));
+			TimeData td=new TimeData(eventId,currentTimestamp);
+			timeDataList.add(td);
 		} else if (type.equals("invalid")) {
 			EventSetup newEvent = new EventSetup();
 			newEvent.eventSetup(INVALID_EVENT);
@@ -167,9 +218,13 @@ public class EndToEndTestGlues {
 			newEvent.eventSetup();
 			for (int i = 0; i < n; i++) {
 				newEvent.createUniqueEvent(newEvent.getEvent(), i);
+				String currentTimestamp=String.valueOf(System.currentTimeMillis());
+				String eventId=newEvent.getEventId();
 				newEvent.fireEvent();
 				list.add(new TimeAndZone(newEvent.getEventTimestamp(), newEvent
 						.getRuleTimeZone()));
+				TimeData td=new TimeData(eventId,currentTimestamp);
+				timeDataList.add(td);
 				Commons.delay(x * 1000);
 			}
 		}

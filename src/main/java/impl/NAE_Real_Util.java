@@ -32,6 +32,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.testng.annotations.Test;
 
 import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.ValueMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
@@ -526,5 +527,18 @@ public class NAE_Real_Util {
 	public void tenantexisttest(){
 	NAE_Real_Util util = new NAE_Real_Util();
 	util.verifyTenantExist("Tenant3");
+	}
+	@Test
+	public void getRequestByHeaderMatching(){
+		WireMock.configureFor(MOCK_SERVER, MOCK_SERVER_PORT);
+//		ValueMatchingStrategy vms=new ValueMatchingStrategy();
+//		vms.setMatches("miaotest1");
+		RequestPatternBuilder builder = new RequestPatternBuilder(
+				RequestMethod.POST, urlMatching("/publish/xhs/qa/.*")).withHeader("X-B3-TraceId", equalTo("miaotest1"));
+		List<LoggedRequest> reqs = findAll(builder);
+		int listSize = reqs.size();
+		for (int i = 0; i < listSize; i++) {
+			LOGGER.debug(reqs.get(i).getHeader("X-B3-TraceId")+": "+reqs.get(i).getBodyAsString());
+		}
 	}
 }

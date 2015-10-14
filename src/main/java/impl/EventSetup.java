@@ -1,7 +1,13 @@
 package impl;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.ProvisionsBody;
@@ -14,9 +20,16 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.Test;
 
+import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.jayway.restassured.RestAssured.given;
 
 /**
@@ -321,10 +334,14 @@ public class EventSetup {
 	 * Method that post an event to EEL
 	 */
 	public void fireEvent() {
+		
 		Response response = null;
+		
+		
 		response = given().log().all().body(this.event).expect()
 				.statusCode(200).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
+		
 	}
 
 	/**
@@ -418,6 +435,22 @@ public class EventSetup {
 		return timestampTime;
 	}
 
+	public String getEventId(){
+		String eventId="";
+		String eventBody = this.event;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode rootNode = mapper.readTree(eventBody);
+			JsonNode contentNode = rootNode.path("content");
+			JsonNode eventIdNode = contentNode.path("eventId");
+			eventId = eventIdNode.getTextValue();
+		} catch (JsonProcessingException e) {
+			LOGGER.error(e);
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
+		return eventId;
+	}
 	/**
 	 * Method that gets the timezone field value from the AIP rule JSON
 	 */
@@ -479,5 +512,6 @@ public class EventSetup {
 		long currentTimestamp = System.currentTimeMillis();
 		System.out.println(currentTimestamp);
 	}
+	
 
 }

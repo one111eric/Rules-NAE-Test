@@ -1,7 +1,17 @@
 package glue;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.jayway.restassured.RestAssured.given;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +20,20 @@ import impl.Commons;
 import impl.EventSetup;
 import impl.NAE_Properties;
 import impl.NAE_Real_Util;
-
 import impl.ServerStatusCodes;
+import impl.TimeData;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
+import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.jayway.restassured.response.Response;
 
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -43,8 +59,41 @@ public class EndToEndTTLTestGlues {
 	private static final String INVALID_EVENT = "test_data/WrongTopicEvent.json";
 	private static final String AIP_HANDLER = "/xhs";
 	private int eventPosted=0;
+	private List<TimeData> timeDataList=new ArrayList<TimeData>();
 	
+//	@Before
+//	public void beforeScenario(){
+//		this.timeDataList=new ArrayList<TimeData>();
+//		
+//	}
 	
+	@After
+	//And("^I write the data to file$")
+	public void afterScenario(){
+		for(TimeData td : timeDataList){
+			String eventId=td.getEventId();
+			//LOGGER.debug(eventId);
+			//Commons.delay(10000);
+			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
+			RequestPatternBuilder builder = new RequestPatternBuilder(
+					RequestMethod.POST, urlMatching("/publish/xhs/qa/.*")).withHeader("X-B3-TraceId", equalTo(eventId));
+			List<LoggedRequest> reqs = findAll(builder);
+			int listSize = reqs.size();
+			if(listSize>=1){
+				
+			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
+				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
+					writer.write(eventId+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+"\n");
+					writer.flush();
+				    writer.close();
+				} catch (FileNotFoundException e) {
+					LOGGER.error(e);
+				} catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
+		}
+	}
 	
 	@Given("^\"([^\"]*)\" with site \"([^\"]*)\" has a rule with TTL (\\d+) seconds$")
 	public void setupTTLRuleToLocation(String locationName,String siteId,int ttlTime) throws Throwable{
@@ -71,8 +120,13 @@ public class EndToEndTTLTestGlues {
 	public void postEventWithSessionId(String locationName,String sessionId){
 		LOGGER.debug(this.eventPosted);
 		es.createUniqueEventNew(es.getEvent(), this.eventPosted, sessionId);
+		LOGGER.debug(es.getEventId());
+		String currentTimestamp=String.valueOf(System.currentTimeMillis());
+		String eventId=es.getEventId();
 		es.fireEvent();
 		this.eventPosted+=1;
+		TimeData td=new TimeData(eventId,currentTimestamp);
+		timeDataList.add(td);
 	}
 	
 	@And("^I post an AIP Event of \"([^\"]*)\" with \"([^\"]*)\" to EEL with SessionId \"([^\"]*)\"$")
@@ -80,8 +134,13 @@ public class EndToEndTTLTestGlues {
 		LOGGER.debug(this.eventPosted);
 		es.setupEventNew(siteId);
 		es.createUniqueEventNew(es.getEvent(), this.eventPosted, sessionId);
+		LOGGER.debug(es.getEventId());
+		String currentTimestamp=String.valueOf(System.currentTimeMillis());
+		String eventId=es.getEventId();
 		es.fireEvent();
 		this.eventPosted+=1;
+		TimeData td=new TimeData(eventId,currentTimestamp);
+		timeDataList.add(td);
 	}
 	
 	
