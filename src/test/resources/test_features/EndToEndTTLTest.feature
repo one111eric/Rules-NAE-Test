@@ -42,5 +42,5 @@ Scenario Outline: test how new Session Id behave for two locations
 	
 	Examples:
 	|location1|location2|site_id1|site_id2|ttl_time|SessionId1|SessionId2|x|
-	|MiaoLocation6|MiaoLocation7|850602|850603|10|MiaoSession6|MiaoSession7|2|
-	|MiaoLocation6|MiaoLocation7|850602|850603|10|MiaoSession8|MiaoSession8|2|
+	|MiaoLocation11|MiaoLocation12|850602|850603|10|MiaoSession6|MiaoSession7|2|
+	|MiaoLocation11|MiaoLocation12|850602|850603|10|MiaoSession8|MiaoSession8|2|
