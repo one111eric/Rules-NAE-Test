@@ -151,7 +151,7 @@ public class EndToEndTTLTestGlues {
 	
 	@Then("^I should see the number of the request to location \"([^\"]*)\" increased by (\\d+)$")
 	public void checkRequestsIncreasedBy(String locationName,int x){
-		Commons.delay(15000);
+		Commons.delay(25000);
 		int newRequestNumber = util.countRequests(publishUrl);
 		LOGGER.debug(publishUrl);
 		LOGGER.debug("Number of Notification sent to Mock Server from "
@@ -182,7 +182,7 @@ public class EndToEndTTLTestGlues {
 	
 	@Then("^I should see the number of all requests to mock server increased by (\\d+)$")
 	public void checkAllRequestsIncreasedBy(int x){
-		Commons.delay(15000);
+		Commons.delay(25000);
 		int newRequestNumber = util.countRequests(publishUrl);
 		LOGGER.debug(publishUrl);
 		LOGGER.debug("Number of Notification sent to Mock Server from all locations"
