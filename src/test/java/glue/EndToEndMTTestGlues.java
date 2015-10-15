@@ -155,7 +155,7 @@ public class EndToEndMTTestGlues {
 
 	@Then("^I should receive (\\d+) notification messages on mock server$")
 	public void verifyNotifCount(int notifCount) {
-		Commons.delay(20000);
+		Commons.delay(25000);
 		int newRequestNumber = util.countRequests(publishUrl);
 		LOGGER.debug(publishUrl);
 		LOGGER.debug("Number of Notification sent to Mock Server from "
@@ -169,7 +169,8 @@ public class EndToEndMTTestGlues {
 		for (int i = 0; i < notifReceived; i++) {
 			LOGGER.debug(lastRequestBodyList.get(i));
 		}
-		Assert.assertEquals(increased, notifCount);
+		Assert.assertEquals(notifCount,increased);
+		
 	}
 
 	/**
