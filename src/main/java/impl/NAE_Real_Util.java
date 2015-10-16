@@ -491,6 +491,7 @@ public class NAE_Real_Util {
 	 */
 	public boolean verifyTopicHandlerExist(String tenant, String topicHandler){
 		boolean ifExist=false;
+		
 		Response response = null;
 		response = given().log().all()
 				.get(NAE_Properties.EEL_HEALTH_ENDPOINT);

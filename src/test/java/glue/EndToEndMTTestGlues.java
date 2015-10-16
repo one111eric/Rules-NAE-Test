@@ -172,6 +172,26 @@ public class EndToEndMTTestGlues {
 		Assert.assertEquals(notifCount,increased);
 		
 	}
+	
+	@Then("^I should receive at most (\\d+) notification messages on mock server$")
+	public void verifyAtMostNotifCount(int notifCount) {
+		Commons.delay(25000);
+		int newRequestNumber = util.countRequests(publishUrl);
+		LOGGER.debug(publishUrl);
+		LOGGER.debug("Number of Notification sent to Mock Server from "
+				+ location + " : " + newRequestNumber);
+		int increased = newRequestNumber - requestNumber;
+		this.notifReceived = increased;
+		LOGGER.debug("Number of new Notification sent to Mock Server from "
+				+ location + " : " + notifReceived);
+		List<String> lastRequestBodyList = util.getRequestPayloadList(
+				publishUrl, notifReceived);
+		for (int i = 0; i < notifReceived; i++) {
+			LOGGER.debug(lastRequestBodyList.get(i));
+		}
+		Assert.assertTrue(notifCount-increased>=0);
+		
+	}
 
 	/**
 	 * Test for another tenant with modified AIP topic handler
