@@ -3,7 +3,12 @@
      "pattern": {
        "name": "AlarmInProgress",
        "timestamp": "?time",
-       "alarmSessionId": "?id"
+       "metadata":{
+       "alarmSessionId": "?id",
+       "alarmData":{
+       "instanceName": "?instance"
+       }
+       }
      }
  },
  "condition": {
@@ -26,12 +31,14 @@
        "params": {
            "deviceid": "8987917728960591079",
            "duration": "10000",
-           "timezone": "PST8PDT"
+           "timezone": "US/Pacific"
        },
        "data": {
            "env": "qa",
            "timestamp": "?time",
+           "instance": "?instance",
            "zone": ""
+           
        }
      }
    },

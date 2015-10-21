@@ -49,10 +49,13 @@
         "_type": "http://ourwiki.comcast.com/IoT/event/state/change",
         "name": "AlarmInProgress",
         "timestamp": 1439476057719,
-        "alarmSessionId": "mySessionId",
         "metadata": {
             "environment": "qa",
-            "site": "siteId"
+            "site": "siteId",
+            "alarmSessionId": "mySessionId",
+            "alarmData": {
+              "instanceName": "Front Door"
+            }
         },
         "title": "Panel Status: Alarm",
         "eventId": "123456789"

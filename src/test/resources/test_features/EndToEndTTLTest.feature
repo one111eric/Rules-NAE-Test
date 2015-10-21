@@ -6,7 +6,6 @@ Scenario Outline: Basic end to end to verify new rule works
 	Then I should have a number
 	And I post an AIP Event of "<location>" to EEL with SessionId "<SessionId>" 
 	Then I should see the number of the request to location "<location>" increased by <x>
-	#And I write the data to file
 	Examples: 
 		|location|site_id|ttl_time|SessionId|x|
 		|MiaoLocation10|850601|10|miaoSession1|1|

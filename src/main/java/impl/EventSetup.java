@@ -42,10 +42,10 @@ import static com.jayway.restassured.RestAssured.given;
 public class EventSetup {
 	public static final String RULES_LOCATION_URL = "http://rest.qa.rules.comcast.com/locations/";
 	public static final String MOLECULE_MAPPING_URL = "http://molecule.qa.rules.vacsv.com/mappings/xh/";
-	public static final String RULE_JSON = "test_data/AipRule.json";
+	public static final String RULE_JSON = "test_data/NewAipRule.json";
 	public static final String RULE_JSON_NEW="test_data/NewAipRule.json";
 	public static final String INVALID_RULE_JSON = "test_data/InvalidRule.json";
-	public static final String EVENT_JSON = "test_data/EventToEEL.json";
+	public static final String EVENT_JSON = "test_data/NewAipEvent.json";
     public static final String EVENT_JSON_NEW="test_data/NewAipEvent.json";
 	private NAE_Real_Util util = new NAE_Real_Util();
 
@@ -389,7 +389,8 @@ public class EventSetup {
 			JsonNode contentNode = rootNode.path("content");
 
 			JsonNode timestamp = contentNode.path("timestamp");
-			JsonNode sessionIdNode = contentNode.path("alarmSessionId");
+			JsonNode metaDataNode=contentNode.path("metadata");
+			JsonNode sessionIdNode = metaDataNode.path("alarmSessionId");
 			String timestampString = String.valueOf(timestamp.getLongValue());
 
 			JsonNode eventId = contentNode.path("eventId");
@@ -461,8 +462,8 @@ public class EventSetup {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode rootNode = mapper.readTree(rule);
-			JsonNode actionNode = rootNode.path("action");
-			JsonNode codeNode = actionNode.path("code");
+			JsonNode actionNode = rootNode.path("actions");
+			JsonNode codeNode = actionNode.get(0).path("code");
 			JsonNode paramsNode = codeNode.path("params");
 			JsonNode timezoneNode = paramsNode.path("timezone");
 			timeZone = timezoneNode.getTextValue();
@@ -499,12 +500,12 @@ public class EventSetup {
 		return provisionsBody;
 	}
 
-	// @Test
-	// public void testTimezone() throws Throwable{
-	// EventSetup es=new EventSetup();
-	// //es.setupRule();
-	// es.getRuleTimeZone();
-	// }
+	 //@Test
+	 public void testTimezone() throws Throwable{
+	 EventSetup es=new EventSetup();
+	 //es.setupRule();
+	 LOGGER.debug(es.getRuleTimeZone());
+	 }
 
 	// simple unit test to print current timestamp
 	// @Test

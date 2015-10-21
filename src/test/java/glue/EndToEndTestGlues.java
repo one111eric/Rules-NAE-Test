@@ -189,10 +189,10 @@ public class EndToEndTestGlues {
 					.getTimestamp() / 1000, timeList.get(i).getTimezone());
 			LOGGER.debug(readableTime);
 			Assert.assertTrue(apnMessage
-					.startsWith("An alarm was triggered at " + readableTime));
-			Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
-			Assert.assertTrue(gcmMessage.startsWith("Since " + readableTime));
-			Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
+					.startsWith("An alarm was triggered by Front Door at " + readableTime));
+			//Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
+			Assert.assertTrue(gcmMessage.startsWith("\u003ch\u003eAlarm in Progress!\n\u003cb\u003eTriggered by Front Door at " + readableTime));
+			//Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
 		}
 
 	}
