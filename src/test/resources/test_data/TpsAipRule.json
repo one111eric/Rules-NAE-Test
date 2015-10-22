@@ -1,0 +1,49 @@
+{
+ "when": {
+     "pattern": {
+       "name": "AlarmInProgress",
+       "timestamp": "?time",
+       "metadata":{
+       "alarmSessionId": "?id",
+       "alarmData":{
+       "instanceName": "?instance"
+       }
+       }
+     }
+ },
+ "condition": {
+   "not": {
+     "pattern": {
+       "alarmSessionId": "?id"
+     }
+      }
+ },
+ "actions": [
+   {
+     "endpoint": "http://nae.tps.i.xrs.vacsv.com/notify",
+     "code": {
+       "location": "locationName",
+       "tenant": "xh",
+       "type": "ALARM_IN_PROGRESS",
+       "transport": [
+           "emo"
+       ],
+       "params": {
+           "deviceid": "8987917728960591079",
+           "duration": "10000",
+           "timezone": "US/Pacific"
+       },
+       "data": {
+           "env": "tps",
+           "timestamp": "?time",
+           "instance": "?instance",
+           "zone": ""
+           
+       }
+     }
+   },
+   {
+     "code":"Env.AddFact('', {alarmSessionId: id, ttl: ?alivetime});"
+   }
+ ]
+}
