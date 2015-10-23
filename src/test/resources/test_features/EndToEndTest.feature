@@ -11,8 +11,8 @@ Scenario Outline: send a single event to a location and verify it goes through
   And the messages are in correct format with correct timestamp
   Examples:
   |location|type|y|
-  |MiaoLocation00001|valid|1|
-  |MiaoLocation00001|invalid|0|
+  |424242qa|valid|1|
+  |424242qa|invalid|0|
   
 Scenario Outline: Send n number of identical/unique events with x secs delay and check the result
   When I check the number of request from "<location>" received by mock server
@@ -22,7 +22,7 @@ Scenario Outline: Send n number of identical/unique events with x secs delay and
   And the request body is in correct json format
   Examples: 
   |location|n|type|x|y|
-  |MiaoLocation00001|10|identical|1|6|
-  |MiaoLocation00001|10|unique|1|10|
+  |424242qa|10|identical|1|6|
+  |424242qa|10|unique|1|10|
   
   

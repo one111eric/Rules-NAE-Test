@@ -63,14 +63,15 @@ public class EndToEndTestGlues {
 			//Commons.delay(10000);
 			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
 			RequestPatternBuilder builder = new RequestPatternBuilder(
-					RequestMethod.POST, urlMatching("/publish/xhs/qa/.*")).withHeader("X-B3-TraceId", equalTo(eventId));
+					RequestMethod.POST, urlMatching("/locations/424242qa/.*"));
+			//.withHeader("X-B3-TraceId", equalTo(eventId));
 			List<LoggedRequest> reqs = findAll(builder);
 			int listSize = reqs.size();
 			if(listSize>=1){
 				
 			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
 				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
-					writer.write(eventId+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+",\n");
+					writer.write(reqs.get(listSize-1).getHeader("X-B3-TranceId")+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+",\n");
 					writer.flush();
 				    writer.close();
 				} catch (FileNotFoundException e) {
