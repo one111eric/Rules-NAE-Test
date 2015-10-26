@@ -89,8 +89,8 @@ public class EndToEndTestGlues {
 	@When("^I check the number of request from \"([^\"]*)\" received by mock server$")
 	public void getLocationRequestNumber(String location) {
 		this.location = location;
-		this.publishUrl = "/publish/xhs/qa/" + location
-				+ "/notifications/alarm.json";
+		this.publishUrl = "/locations/" + location +"/.*";
+				//+ "/notifications/alarm.json";
 	}
 
 	@Then("^I should get a number$")

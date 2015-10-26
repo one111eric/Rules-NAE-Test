@@ -34,7 +34,7 @@
            "timezone": "US/Pacific"
        },
        "data": {
-           "env": "tps",
+           "env": "qa",
            "timestamp": "?time",
            "instance": "?instance",
            "zone": ""

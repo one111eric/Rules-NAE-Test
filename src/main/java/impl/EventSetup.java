@@ -40,13 +40,13 @@ import static com.jayway.restassured.RestAssured.given;
  *
  */
 public class EventSetup {
-	public static final String RULES_LOCATION_URL = "http://rest.qa.rules.comcast.com/locations/";
-	public static final String MOLECULE_MAPPING_URL = "http://molecule.qa.rules.vacsv.com/mappings/xh/";
-	public static final String RULE_JSON = "test_data/NewAipRule.json";
-	public static final String RULE_JSON_NEW="test_data/NewAipRule.json";
+	public static final String RULES_LOCATION_URL = "http://rest.tps.rules.comcast.com/locations/";
+	public static final String MOLECULE_MAPPING_URL = "http://molecule.tps.rules.vacsv.com/mappings/xh/";
+	public static final String RULE_JSON = "test_data/TpsAipRule.json";
+	public static final String RULE_JSON_NEW="test_data/TpsAipRule.json";
 	public static final String INVALID_RULE_JSON = "test_data/InvalidRule.json";
-	public static final String EVENT_JSON = "test_data/NewAipEvent.json";
-    public static final String EVENT_JSON_NEW="test_data/NewAipEvent.json";
+	public static final String EVENT_JSON = "test_data/TpsAipEvent.json";
+    public static final String EVENT_JSON_NEW="test_data/TpsAipEvent.json";
 	private NAE_Real_Util util = new NAE_Real_Util();
 
 	private String session;
@@ -136,8 +136,8 @@ public class EventSetup {
 	 * Method that setup location/siteId using provisions api
 	 */
 	public void setupProvisions() throws Throwable {
-		String locationName = "MiaoLocation00001";
-		String siteId = "850520";
+		String locationName = "424242qa";
+		String siteId = "424242qa";
 		String locationEndPoint = RULES_LOCATION_URL + locationName;
 		Response response = null;
 		// delete the existing location
@@ -260,7 +260,7 @@ public class EventSetup {
 			myRule = util.getFile(INVALID_RULE_JSON);
 		}
 		myRule = myRule.replace("locationName", location).replace("xh",
-				tenantName);
+				tenantName).replace("?alivetime","10");;
 		String ruleEndPoint = RULES_LOCATION_URL + location + "/rules/"
 				+ ruleNumber;
 		Response response = null;
