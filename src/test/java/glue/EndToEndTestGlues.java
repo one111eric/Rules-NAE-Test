@@ -71,7 +71,7 @@ public class EndToEndTestGlues {
 				
 			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
 				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
-					writer.write(reqs.get(listSize-1).getHeader("X-B3-TranceId")+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+",\n");
+					writer.write(reqs.get(listSize-1).getHeader("X-B3-TraceId")+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+",\n");
 					writer.flush();
 				    writer.close();
 				} catch (FileNotFoundException e) {

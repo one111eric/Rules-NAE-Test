@@ -1,8 +1,5 @@
 package glue;
 
-
-
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,17 +10,6 @@ import java.io.Writer;
 import org.apache.log4j.Logger;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
-
-
-
-
-
-
-
-
-
-
 
 
 
