@@ -48,7 +48,7 @@ function subscribe() {
     do
         local ret=$(curl -H "Content-Type: application/json" -X POST -s -d "{ \"topic\":\"$topic\", \"subscription\":$sub }" http://$endpoint/elements/topics)
         if [[ $ret == *"cannot reach elements"* ]]; then
-            ecgi "retring..."
+            echo "retring..."
             sleep 1
         elif [[ $ret == *"subscribed"* ]]; then
             return 0
