@@ -337,8 +337,9 @@ public class EventSetup {
 		
 		Response response = null;
 		
-		
-		response = given().log().all().body(this.event).expect()
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("X-Debug", "true");
+		response = given().log().all().headers(headers).body(this.event).expect()
 				.statusCode(200).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
 		
