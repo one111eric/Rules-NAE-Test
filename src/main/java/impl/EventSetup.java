@@ -341,7 +341,7 @@ public class EventSetup {
 		headers.put("X-Debug", "true");
 		response = given().log().all().headers(headers).body(this.event).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
-		
+		LOGGER.debug("Status: "+ response.statusCode());
 	}
 
 	/**
