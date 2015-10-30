@@ -21,12 +21,7 @@ public class Payload {
     @JsonProperty("gcm")
 	private Gcm gcm;
     private String eventId;
-	public String getEventId() {
-		return eventId;
-	}
-	public void setEventId(String eventId) {
-		this.eventId = eventId;
-	}
+	
 	public Payload(){
 		
 	}
@@ -37,8 +32,14 @@ public class Payload {
     	Payload payload=mapper.readValue(x, Payload.class);
     	this.apns=payload.getApns();
     	this.gcm=payload.getGcm();
+    	this.eventId=payload.getEventId();
     }
-    
+    public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
 	public Apns getApns() {
 		return apns;
 	}
