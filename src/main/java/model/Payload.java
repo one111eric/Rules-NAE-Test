@@ -20,6 +20,13 @@ public class Payload {
 	private Apns apns;
     @JsonProperty("gcm")
 	private Gcm gcm;
+    private String eventId;
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
 	public Payload(){
 		
 	}
