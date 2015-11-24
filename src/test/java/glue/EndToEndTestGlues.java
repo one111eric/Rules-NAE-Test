@@ -186,13 +186,16 @@ public class EndToEndTestGlues {
 
 			String gcmMessage = util.mapPayload(lastRequestBodyList.get(i))
 					.getGcm().getOtherdata().getMessage();
+			String gcmTitle=util.mapPayload(lastRequestBodyList.get(i))
+					.getGcm().getOtherdata().getTitle();
 			String readableTime = util.transformTime(timeList.get(i)
 					.getTimestamp() / 1000, timeList.get(i).getTimezone());
 			LOGGER.debug(readableTime);
 			Assert.assertTrue(apnMessage
 					.startsWith("An alarm was triggered by Front Door at " + readableTime));
 			//Assert.assertTrue(apnMessage.endsWith("Slide to view details."));
-			Assert.assertTrue(gcmMessage.startsWith("\u003ch\u003eAlarm in Progress!\n\u003cb\u003eTriggered by Front Door at " + readableTime));
+			Assert.assertTrue(gcmMessage.startsWith("Alarm in Progress! Triggered by Front Door at " + readableTime));
+			Assert.assertTrue(gcmTitle.equals("XFINITY Home"));
 			//Assert.assertTrue(gcmMessage.endsWith("Touch to view details."));
 		}
 
