@@ -20,7 +20,7 @@
  },
  "actions": [
    {
-     "endpoint": "http://nae.tps.i.xrs.vacsv.com/notify",
+     "endpoint": "nae",
      "code": {
        "location": "locationName",
        "tenant": "xh",
