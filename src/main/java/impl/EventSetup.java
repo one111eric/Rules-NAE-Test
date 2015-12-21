@@ -40,8 +40,10 @@ import static com.jayway.restassured.RestAssured.given;
  *
  */
 public class EventSetup {
-	public static final String RULES_LOCATION_URL = "http://rest.tps.rules.comcast.com/locations/";
-	public static final String MOLECULE_MAPPING_URL = "http://molecule.tps.rules.vacsv.com/mappings/xh/";
+	public static final String RULES_LOCATION_URL = NAE_Properties.REST_ENDPOINT+"locations/";
+			//"http://rest.tps.rules.comcast.com/locations/";
+	public static final String MOLECULE_MAPPING_URL = NAE_Properties.MOLECULE_MAPPING_ENDPOINT;
+			//"http://molecule.tps.rules.vacsv.com/mappings/xh/";
 	public static final String RULE_JSON = "test_data/TpsAipRule.json";
 	public static final String RULE_JSON_NEW="test_data/TpsAipRule.json";
 	public static final String INVALID_RULE_JSON = "test_data/InvalidRule.json";
