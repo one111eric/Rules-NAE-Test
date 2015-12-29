@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.testng.Assert;
 
 import com.github.tomakehurst.wiremock.client.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.client.ValueMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
@@ -62,8 +63,10 @@ public class EndToEndTestGlues {
 			//LOGGER.debug(eventId);
 			//Commons.delay(10000);
 			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
+			ValueMatchingStrategy strat=new ValueMatchingStrategy();
+			strat.setContains(eventId);
 			RequestPatternBuilder builder = new RequestPatternBuilder(
-					RequestMethod.POST, urlMatching("/locations/424242qa/.*"));
+					RequestMethod.POST, urlMatching("/locations/424242qa/.*")).withRequestBody(strat);
 			//.withHeader("X-B3-TraceId", equalTo(eventId));
 			List<LoggedRequest> reqs = findAll(builder);
 			int listSize = reqs.size();
