@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +21,11 @@ import impl.Commons;
 import impl.EventSetup;
 import impl.NAE_Properties;
 import impl.NAE_Real_Util;
+import impl.PublishedEvent;
 import impl.ServerStatusCodes;
 import impl.TimeData;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
@@ -70,26 +73,47 @@ public class EndToEndTTLTestGlues {
 	
 	@After
 	//And("^I write the data to file$")
-	public void afterScenario(){
+	public void afterScenario() throws ClientProtocolException, IOException, ParseException{
+//		for(TimeData td : timeDataList){
+//			String eventId=td.getEventId();
+//			//LOGGER.debug(eventId);
+//			//Commons.delay(10000);
+//			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
+//			ValueMatchingStrategy strat=new ValueMatchingStrategy();
+//			strat.setContains(eventId);
+//			RequestPatternBuilder builder = new RequestPatternBuilder(
+//					RequestMethod.POST, urlMatching("/locations/424242qa/.*")).withRequestBody(strat);
+////			RequestPatternBuilder builder = new RequestPatternBuilder(
+////					RequestMethod.POST, urlMatching("/locations/424242qa/.*")).withHeader("X-B3-TraceId", equalTo(eventId));
+//			List<LoggedRequest> reqs = findAll(builder);
+//			int listSize = reqs.size();
+//			if(listSize>=1){
+//				
+//			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
+//				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
+//					writer.write(reqs.get(listSize-1).getHeader("X-B3-TraceId")+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+","+
+//							(reqs.get(listSize - 1).getLoggedDate().getTime()-Long.valueOf(td.getCurrentTimestamp()))+",\n");
+//					writer.flush();
+//				    writer.close();
+//				} catch (FileNotFoundException e) {
+//					LOGGER.error(e);
+//				} catch (IOException e) {
+//					LOGGER.error(e);
+//				}
+//			}
+//		}
+		
 		for(TimeData td : timeDataList){
 			String eventId=td.getEventId();
-			//LOGGER.debug(eventId);
-			//Commons.delay(10000);
-			WireMock.configureFor(NAE_Properties.MOCK_SERVER, NAE_Properties.MOCK_SERVER_PORT);
-			ValueMatchingStrategy strat=new ValueMatchingStrategy();
-			strat.setContains(eventId);
-			RequestPatternBuilder builder = new RequestPatternBuilder(
-					RequestMethod.POST, urlMatching("/locations/424242qa/.*")).withRequestBody(strat);
-//			RequestPatternBuilder builder = new RequestPatternBuilder(
-//					RequestMethod.POST, urlMatching("/locations/424242qa/.*")).withHeader("X-B3-TraceId", equalTo(eventId));
-			List<LoggedRequest> reqs = findAll(builder);
-			int listSize = reqs.size();
-			if(listSize>=1){
-				
-			    //LOGGER.debug(eventId+ ", "+ td.getCurrentTimestamp()+ ", "+ reqs.get(listSize-1).getHeader("X-B3-TraceId")+": "+reqs.get(listSize-1).getBodyAsString());
+			String timestamp=td.getCurrentTimestamp();
+			PublishedEvent publishedEvent=new PublishedEvent(eventId,Long.valueOf(timestamp));
+			publishedEvent.checkifPublished();
+			if(publishedEvent.isIfPublished()&&publishedEvent.isIfReceived()){
+				String logTimestamp=String.valueOf(publishedEvent.getLogTimestamp());
+				String receivedTimestamp=String.valueOf(publishedEvent.getReceivedTimestamp());
 				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
-					writer.write(reqs.get(listSize-1).getHeader("X-B3-TraceId")+","+td.getCurrentTimestamp()+","+reqs.get(listSize-1).getLoggedDate().getTime()+","+
-							(reqs.get(listSize - 1).getLoggedDate().getTime()-Long.valueOf(td.getCurrentTimestamp()))+",\n");
+					writer.write(eventId+","+receivedTimestamp+","+logTimestamp+","+
+							(Long.valueOf(logTimestamp)-Long.valueOf(receivedTimestamp))+",\n");
 					writer.flush();
 				    writer.close();
 				} catch (FileNotFoundException e) {
@@ -98,6 +122,7 @@ public class EndToEndTTLTestGlues {
 					LOGGER.error(e);
 				}
 			}
+			
 		}
 	}
 	

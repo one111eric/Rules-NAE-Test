@@ -90,7 +90,7 @@ public class PublishedEvent {
 		StringBuffer buffer = new StringBuffer();
 		String line = "";
 		while ((line = rd.readLine()) != null) {
-			buffer.append(buffer);
+			buffer.append(line);
 		}
 		String responseString = buffer.toString();
 		System.out.println(responseString);
@@ -127,13 +127,13 @@ public class PublishedEvent {
 
 		else {
 			this.ifReceived = false;
-			System.out.printf("%d accepted by EEL, something is wrong\n",eelAcceptedCount);
+			System.out.printf("%d accepted by EEL\n",eelAcceptedCount);
 		}
 		
 		String endQuery = NAE_Properties.PROD_ES_URL
 				+ dateIndex
 				+ typeIndex
-				+ "/_search?q=tx.traceId:"
+				+ "/_search?q="
 				+ "%22"
 				+ this.eventId 
 				+ "%22%20AND%20env.name:%22"
@@ -185,7 +185,7 @@ public class PublishedEvent {
 
 		else {
 			this.ifPublished = false;
-			System.out.printf("%d published by NAE, something is wrong\n",naePublishedCount);
+			System.out.printf("%d published by NAE\n",naePublishedCount);
 		}
 
 	}

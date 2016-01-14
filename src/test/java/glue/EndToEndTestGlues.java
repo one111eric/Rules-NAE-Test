@@ -95,7 +95,6 @@ public class EndToEndTestGlues {
 		for(TimeData td : timeDataList){
 			String eventId=td.getEventId();
 			String timestamp=td.getCurrentTimestamp();
-			
 			PublishedEvent publishedEvent=new PublishedEvent(eventId,Long.valueOf(timestamp));
 			publishedEvent.checkifPublished();
 			if(publishedEvent.isIfPublished()&&publishedEvent.isIfReceived()){
@@ -103,7 +102,7 @@ public class EndToEndTestGlues {
 				String receivedTimestamp=String.valueOf(publishedEvent.getReceivedTimestamp());
 				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
 					writer.write(eventId+","+receivedTimestamp+","+logTimestamp+","+
-							(Long.valueOf(logTimestamp)-Long.valueOf(timestamp))+",\n");
+							(Long.valueOf(logTimestamp)-Long.valueOf(receivedTimestamp))+",\n");
 					writer.flush();
 				    writer.close();
 				} catch (FileNotFoundException e) {
@@ -114,8 +113,7 @@ public class EndToEndTestGlues {
 			}
 			
 		}
-		
-		
+
 	}
 	
 	/**
