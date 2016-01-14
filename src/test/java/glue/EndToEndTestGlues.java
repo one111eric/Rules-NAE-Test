@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +20,11 @@ import impl.Commons;
 import impl.EventSetup;
 import impl.NAE_Properties;
 import impl.NAE_Real_Util;
+import impl.PublishedEvent;
 import impl.TimeAndZone;
 import impl.TimeData;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
@@ -56,8 +59,11 @@ public class EndToEndTestGlues {
 	private List<TimeData> timeDataList=new ArrayList<TimeData>();
 
 	@After
-	//And("^I write the data to file$")
-	public void afterScenario(){
+	/**
+	 * Using kibana logs to get the transaction time instead of mockserver log
+	 */
+	public void afterScenario() throws ClientProtocolException, IOException, ParseException{
+		/*Gets quote out because I'm switching to use kibana for transaction time measurement
 		for(TimeData td : timeDataList){
 			String eventId=td.getEventId();
 			//LOGGER.debug(eventId);
@@ -85,6 +91,31 @@ public class EndToEndTestGlues {
 				}
 			}
 		}
+		*/
+		for(TimeData td : timeDataList){
+			String eventId=td.getEventId();
+			String timestamp=td.getCurrentTimestamp();
+			
+			PublishedEvent publishedEvent=new PublishedEvent(eventId,Long.valueOf(timestamp));
+			publishedEvent.checkifPublished();
+			if(publishedEvent.isIfPublished()&&publishedEvent.isIfReceived()){
+				String logTimestamp=String.valueOf(publishedEvent.getLogTimestamp());
+				String receivedTimestamp=String.valueOf(publishedEvent.getReceivedTimestamp());
+				try(Writer writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream("times.csv",true)))){
+					writer.write(eventId+","+receivedTimestamp+","+logTimestamp+","+
+							(Long.valueOf(logTimestamp)-Long.valueOf(timestamp))+",\n");
+					writer.flush();
+				    writer.close();
+				} catch (FileNotFoundException e) {
+					LOGGER.error(e);
+				} catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
+			
+		}
+		
+		
 	}
 	
 	/**

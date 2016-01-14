@@ -26,4 +26,7 @@ public class NAE_Properties {
     //public static final String MOLECULE_ENDPOINT = "http://molecule.tps.i.xrs.vacsv.com/";
 	public static final String MOLECULE_MAPPING_ENDPOINT = MOLECULE_ENDPOINT
 			+ "mappings/xh/";
+	public static final String PROD_ES_URL="http://efk1:efk1efk1@prod.esapi.sjc.i.sv.comcast.com/";
+	public static final String EEL_ENVIRONMENT="eel.tps.A";
+	public static final String NAE_ENVIROMENT="nae.tps.A";
 }

@@ -57,7 +57,7 @@ public class EventSetup {
 	private String event;
 	private String rule;
 	private Map<String, String> headers = new HashMap<String, String>();
-
+    private Map<String, String> eventHeaders = new HashMap<String, String>();
 	private static final Logger LOGGER = Logger.getLogger(EventSetup.class);
 
 	/**
@@ -339,9 +339,9 @@ public class EventSetup {
 		
 		Response response = null;
 		
-		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("X-Debug", "true");
-		response = given().log().all().headers(headers).body(this.event).post(NAE_Properties.EEL_EVENT_ENDPOINT);
+		
+		eventHeaders.put("X-Debug", "true");
+		response = given().log().all().headers(eventHeaders).body(this.event).post(NAE_Properties.EEL_EVENT_ENDPOINT);
 		response.prettyPrint();
 		LOGGER.debug("Status: "+ response.statusCode());
 	}
@@ -374,6 +374,8 @@ public class EventSetup {
 			uniqueEvent = uniqueEvent.replace(timestampString,
 					newTimestampString)
 					.replace(eventIdString, newEventIdString);
+			//add a new traceId header to enforce universal traceId
+			this.eventHeaders.put("X-B3-TraceId",newEventIdString);
 			LOGGER.debug(newEventIdString);
 		} catch (JsonProcessingException e) {
 			LOGGER.error(e);
@@ -405,6 +407,8 @@ public class EventSetup {
 			uniqueEvent = uniqueEvent.replace(timestampString,
 					newTimestampString)
 					.replace(eventIdString, newEventIdString).replace(sessionIdNode.getTextValue(), sessionId);
+			//add a new traceId header to enforce universal traceId
+			this.eventHeaders.put("X-B3-TraceId",newEventIdString);
 			LOGGER.debug(newEventIdString);
 			LOGGER.debug(sessionIdNode.asText());
 			LOGGER.debug(sessionId);
